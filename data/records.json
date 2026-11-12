@@ -1,0 +1,26 @@
+[
+    {
+        "cheat_sheet": "Authentication Cheat Sheet",
+        "vulnerability": "Weak authentication can allow attackers to access user accounts.",
+        "recommended_control": "Use secure authentication, multifactor authentication and appropriate login protections.",
+        "exact_parameter": "Authentication methods and login attempt limits",
+        "owasp_top10_category": "A07:2025 Authentication Failures",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Authentication_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "SQL Injection Prevention Cheat Sheet",
+        "vulnerability": "Untrusted input can change the meaning of database queries.",
+        "recommended_control": "Use parameterized queries or prepared statements.",
+        "exact_parameter": "SQL query parameters and prepared statements",
+        "owasp_top10_category": "A05:2025 Injection",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "Password Storage Cheat Sheet",
+        "vulnerability": "Weak password storage can expose user credentials.",
+        "recommended_control": "Use Argon2id or another approved password hashing algorithm with unique salts.",
+        "exact_parameter": "Password hashing algorithm, work factor and unique salt",
+        "owasp_top10_category": "A04:2025 Cryptographic Failures",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Password_Storage_Cheat_Sheet.md"
+    }
+]
