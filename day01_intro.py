@@ -1,38 +1,27 @@
 
-# OWASPShield - Interactive Menu
+# OWASPShield - Day 01 Introduction
 
-print("===== WELCOME TO OWASPSHIELD =====")
+# Project information using variables
+product = "OWASPShield"
+domain = "Cybersecurity"
+problem = "Understanding common web application security risks"
+target_user = "Students and beginner developers"
+data_source = "OWASP Top 10"
 
-while True:
-    print("\n1. About OWASPShield")
-    print("2. Sample Cybersecurity Questions")
-    print("3. Security Rule Check")
-    print("0. Exit")
+# Display project information
+print("\n===== OWASPSHIELD PROJECT CARD =====")
+print(f"Product: {product}")
+print(f"Domain: {domain}")
+print(f"Problem: {problem}")
+print(f"Target User: {target_user}")
+print(f"Data Source: {data_source}")
 
-    choice = input("\nEnter your choice: ")
+# Take input from the user
+name = input("\nEnter your name: ")
+question = input("What is your cybersecurity question? ")
 
-    if choice == "1":
-        print("\nOWASPShield is a cybersecurity learning assistant.")
-        print("It helps beginners understand web application security.")
-
-    elif choice == "2":
-        print("\nSample Questions:")
-        print("1. What is SQL Injection?")
-        print("2. What is Cross-Site Scripting (XSS)?")
-        print("3. What is OWASP Top 10?")
-
-    elif choice == "3":
-        print("\nBasic Password Security Check")
-        password = input("Enter a sample password: ")
-
-        if len(password) >= 8:
-            print("Password length is acceptable.")
-        else:
-            print("Password is too short. Use at least 8 characters.")
-
-    elif choice == "0":
-        print("\nThank you for using OWASPShield. Goodbye!")
-        break
-
-    else:
-        print("\nInvalid choice! Please enter 0, 1, 2, or 3.")
+# Display user information
+print("\n===== USER DETAILS =====")
+print(f"Welcome, {name}!")
+print(f"Your question is: {question}")
+print("Thank you for using OWASPShield!")
