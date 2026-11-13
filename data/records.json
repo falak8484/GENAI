@@ -1,26 +1,122 @@
 [
     {
         "cheat_sheet": "Authentication Cheat Sheet",
-        "vulnerability": "Weak authentication can allow attackers to access user accounts.",
-        "recommended_control": "Use secure authentication, multifactor authentication and appropriate login protections.",
-        "exact_parameter": "Authentication methods and login attempt limits",
+        "vulnerability": "Weak or easily guessed passwords can allow attackers to access user accounts.",
+        "recommended_control": "Enforce appropriate password length and strength controls, and prevent commonly used passwords.",
+        "exact_parameter": "Password length, password blocklist and password policy",
         "owasp_top10_category": "A07:2025 Authentication Failures",
         "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Authentication_Cheat_Sheet.md"
     },
     {
+        "cheat_sheet": "Authentication Cheat Sheet",
+        "vulnerability": "Insecure password storage can expose user credentials if the database is compromised.",
+        "recommended_control": "Store passwords using a secure adaptive hashing algorithm such as Argon2id, scrypt or PBKDF2.",
+        "exact_parameter": "Password hashing algorithm, salt and work factor",
+        "owasp_top10_category": "A07:2025 Authentication Failures",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Authentication_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "Authentication Cheat Sheet",
+        "vulnerability": "Unsafe password-hash comparison can expose information through timing differences.",
+        "recommended_control": "Use a secure password comparison function provided by the programming language or framework.",
+        "exact_parameter": "Constant-time password hash comparison function",
+        "owasp_top10_category": "A07:2025 Authentication Failures",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Authentication_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "Authentication Cheat Sheet",
+        "vulnerability": "Automated attacks such as brute force and credential stuffing can compromise user accounts.",
+        "recommended_control": "Apply login protections such as rate limiting, monitoring and multifactor authentication.",
+        "exact_parameter": "Login attempt limits, rate limiting and MFA",
+        "owasp_top10_category": "A07:2025 Authentication Failures",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Authentication_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "Authentication Cheat Sheet",
+        "vulnerability": "An attacker with access to an active session may attempt sensitive account changes.",
+        "recommended_control": "Require users to confirm their current credentials before sensitive account changes or transactions.",
+        "exact_parameter": "Re-authentication for password, email and sensitive transaction changes",
+        "owasp_top10_category": "A07:2025 Authentication Failures",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Authentication_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "Password Storage Cheat Sheet",
+        "vulnerability": "Without unique salts, identical passwords can produce matching hashes and make bulk cracking easier.",
+        "recommended_control": "Generate a unique random salt for each password and include it in the password-hashing process.",
+        "exact_parameter": "Unique random salt per password",
+        "owasp_top10_category": "A04:2025 Cryptographic Failures",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Password_Storage_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "Password Storage Cheat Sheet",
+        "vulnerability": "An attacker who obtains password hashes from a database may attempt to crack them.",
+        "recommended_control": "Consider using a pepper as an additional secret stored separately from the password database.",
+        "exact_parameter": "Pepper secret and its secure storage location",
+        "owasp_top10_category": "A04:2025 Cryptographic Failures",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Password_Storage_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "Password Storage Cheat Sheet",
+        "vulnerability": "Low password-hashing work factors can make password cracking faster.",
+        "recommended_control": "Configure an appropriate work factor to make password hashing computationally expensive.",
+        "exact_parameter": "Password hashing work factor or cost setting",
+        "owasp_top10_category": "A04:2025 Cryptographic Failures",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Password_Storage_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "Password Storage Cheat Sheet",
+        "vulnerability": "Using an unsuitable password-hashing algorithm can weaken stored password protection.",
+        "recommended_control": "Prefer Argon2id for password storage and configure its parameters according to security and performance needs.",
+        "exact_parameter": "Argon2id memory, time and parallelism parameters",
+        "owasp_top10_category": "A04:2025 Cryptographic Failures",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Password_Storage_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "Password Storage Cheat Sheet",
+        "vulnerability": "Using outdated or weak password-hashing settings can make password hashes easier to crack.",
+        "recommended_control": "Use bcrypt mainly for legacy systems when Argon2 or scrypt is unavailable, with a work factor of at least 10.",
+        "exact_parameter": "bcrypt work factor, minimum 10",
+        "owasp_top10_category": "A04:2025 Cryptographic Failures",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Password_Storage_Cheat_Sheet.md"
+    },
+    {
         "cheat_sheet": "SQL Injection Prevention Cheat Sheet",
-        "vulnerability": "Untrusted input can change the meaning of database queries.",
-        "recommended_control": "Use parameterized queries or prepared statements.",
-        "exact_parameter": "SQL query parameters and prepared statements",
+        "vulnerability": "Concatenating untrusted input into SQL statements can allow attackers to change query behavior.",
+        "recommended_control": "Use parameterized queries or prepared statements to keep SQL structure separate from user-supplied values.",
+        "exact_parameter": "SQL parameter binding and prepared statements",
         "owasp_top10_category": "A05:2025 Injection",
         "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.md"
     },
     {
-        "cheat_sheet": "Password Storage Cheat Sheet",
-        "vulnerability": "Weak password storage can expose user credentials.",
-        "recommended_control": "Use Argon2id or another approved password hashing algorithm with unique salts.",
-        "exact_parameter": "Password hashing algorithm, work factor and unique salt",
-        "owasp_top10_category": "A04:2025 Cryptographic Failures",
-        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Password_Storage_Cheat_Sheet.md"
+        "cheat_sheet": "SQL Injection Prevention Cheat Sheet",
+        "vulnerability": "Untrusted input used for SQL identifiers or query structure can introduce injection risks.",
+        "recommended_control": "Use an allow-list of permitted table names, column names or sort directions when these choices must be dynamic.",
+        "exact_parameter": "Allow-listed SQL identifiers and permitted query options",
+        "owasp_top10_category": "A05:2025 Injection",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "SQL Injection Prevention Cheat Sheet",
+        "vulnerability": "Excessive database permissions can increase the damage caused by a successful SQL injection attack.",
+        "recommended_control": "Give application database accounts only the permissions required for their tasks.",
+        "exact_parameter": "Database account permissions and privileges",
+        "owasp_top10_category": "A05:2025 Injection",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "SQL Injection Prevention Cheat Sheet",
+        "vulnerability": "Manual escaping of untrusted SQL input is error-prone and can fail to prevent injection.",
+        "recommended_control": "Avoid manually escaping SQL values. Use parameterized queries instead.",
+        "exact_parameter": "SQL parameter binding instead of manual escaping",
+        "owasp_top10_category": "A05:2025 Injection",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "SQL Injection Prevention Cheat Sheet",
+        "vulnerability": "Invalid or unexpected input can create application security risks, including SQL injection when used unsafely.",
+        "recommended_control": "Validate input according to expected type, length and format, while continuing to use parameter binding.",
+        "exact_parameter": "Input type, length and format validation",
+        "owasp_top10_category": "A05:2025 Injection",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.md"
     }
 ]
