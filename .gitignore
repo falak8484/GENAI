@@ -16,3 +16,6 @@ __pycache__/
 
 # IDE settings
 .vscode/
+
+!.env.example
+.env.example

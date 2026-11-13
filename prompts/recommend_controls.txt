@@ -1,0 +1,15 @@
+
+Recommend security controls for the following cybersecurity issue.
+
+Issue: {question}
+
+Structure your response using these sections:
+
+1. Recommended security controls.
+2. How each control works.
+3. Implementation suggestions.
+4. Common mistakes to avoid.
+5. Best practices for developers.
+
+Provide practical and defensive recommendations.
+Use simple language suitable for beginner developers.
