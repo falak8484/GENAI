@@ -6,12 +6,13 @@ from pathlib import Path
 
 from app.smart_search import search_records
 from app.llm import generate_response
+from app.vectorstore import semantic_search
 
 
 app = FastAPI(
     title="OWASPShield API",
     description="API for OWASP security cheat sheet records",
-    version="1.2"
+    version="1.3"
 )
 
 
@@ -96,7 +97,7 @@ def get_record(id: int):
     )
 
 
-# Search records
+# Existing keyword-based search
 @app.get("/search")
 def search(q: str):
     if not q.strip():
@@ -106,6 +107,33 @@ def search(q: str):
         )
 
     return search_records(q)
+
+
+# NEW: Semantic search using ChromaDB
+@app.get("/search/semantic")
+def search_semantic(q: str):
+    if not q.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Search query cannot be empty"
+        )
+
+    try:
+        results = semantic_search(q)
+
+        return {
+            "query": q,
+            "total_results": len(results),
+            "results": results
+        }
+
+    except Exception as e:
+        print(f"SEMANTIC SEARCH ERROR: {type(e).__name__}: {e}")
+
+        raise HTTPException(
+            status_code=502,
+            detail="Unable to perform semantic search."
+        )
 
 
 # Existing questions endpoint
@@ -133,7 +161,6 @@ def chat(data: ChatRequest):
             detail="Question cannot be empty"
         )
 
-    # Select the task-specific prompt
     if data.task == "explain":
         task_prompt = load_prompt("explain_vulnerability.txt")
 
@@ -146,10 +173,8 @@ def chat(data: ChatRequest):
             detail="Invalid task. Choose 'explain' or 'controls'."
         )
 
-    # Load the main system prompt
     system_prompt = load_prompt("system.txt")
 
-    # Insert the user's question into the selected prompt
     user_prompt = task_prompt.format(
         question=data.question
     )
@@ -185,7 +210,6 @@ def evaluate_prompt(data: EvaluationRequest):
             detail="Question cannot be empty"
         )
 
-    # Select prompt version
     if data.prompt_version == "v1":
         filename = "prompt_v1.txt"
 
@@ -198,7 +222,6 @@ def evaluate_prompt(data: EvaluationRequest):
             detail="Invalid prompt version. Choose 'v1' or 'v2'."
         )
 
-    # Load selected evaluation prompt
     prompt_path = EVAL_DIR / filename
 
     try:

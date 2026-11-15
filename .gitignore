@@ -18,4 +18,10 @@ __pycache__/
 .vscode/
 
 !.env.example
-.env.example
+# Generated embedding and vector database files
+data/embedded_chunks.json
+data/chroma_db/
+
+# Python cache
+__pycache__/
+*.py[cod]
