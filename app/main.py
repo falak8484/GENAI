@@ -1,19 +1,23 @@
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import json
+from typing import Optional
 from pathlib import Path
+import json
+
+from langgraph.types import Command
 
 from app.rag import ask_question
 from app.smart_search import search_records
 from app.llm import generate_response
 from app.vectorstore import semantic_search
+from app.graph import agent_graph
 
 
 app = FastAPI(
     title="OWASPShield API",
     description="API for OWASP security cheat sheet records",
-    version="1.4"
+    version="1.5"
 )
 
 
@@ -58,6 +62,15 @@ class ChatRequest(BaseModel):
 class EvaluationRequest(BaseModel):
     question: str
     prompt_version: str
+
+
+# LangGraph agent request model
+class AgentRequest(BaseModel):
+    question: Optional[str] = None
+    config: Optional[dict] = None
+    thread_id: str
+    approved: Optional[bool] = None
+    resume: bool = False
 
 
 # Health check
@@ -137,7 +150,7 @@ def search_semantic(q: str):
         )
 
 
-# NEW: RAG endpoint using OWASP documents
+# RAG endpoint using OWASP documents
 @app.post("/ask")
 def ask(data: Question):
 
@@ -168,6 +181,7 @@ def ask(data: Question):
 # Existing questions endpoint
 @app.post("/questions")
 def ask_question_endpoint(data: Question):
+
     if not data.question.strip():
         raise HTTPException(
             status_code=400,
@@ -274,4 +288,78 @@ def evaluate_prompt(data: EvaluationRequest):
         raise HTTPException(
             status_code=502,
             detail="Unable to generate evaluation response."
+        )
+
+
+# LangGraph Agent endpoint
+@app.post("/agent")
+def run_langgraph_agent(data: AgentRequest):
+
+    graph_config = {
+        "configurable": {
+            "thread_id": data.thread_id
+        }
+    }
+
+    try:
+
+        # Resume after human approval or rejection
+        if data.resume:
+
+            if data.approved is None:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Please provide approved as true or false."
+                )
+
+            result = agent_graph.invoke(
+                Command(resume=data.approved),
+                config=graph_config
+            )
+
+        # Start a new agent request
+        else:
+
+            if not data.question or not data.question.strip():
+                raise HTTPException(
+                    status_code=400,
+                    detail="Question cannot be empty."
+                )
+
+            result = agent_graph.invoke(
+                {
+                    "question": data.question,
+                    "config": data.config or {}
+                },
+                config=graph_config
+            )
+
+        # Check whether human approval is required
+        interrupts = result.get("__interrupt__", [])
+
+        if interrupts:
+            return {
+                "status": "approval_required",
+                "thread_id": data.thread_id,
+                "approval": interrupts[0].value
+            }
+
+        # Completed response
+        return {
+            "status": "completed",
+            "thread_id": data.thread_id,
+            "tool_used": result.get("tool"),
+            "result": result.get("result"),
+            "history": result.get("history", [])
+        }
+
+    except HTTPException:
+        raise
+
+    except Exception as e:
+        print(f"AGENT ERROR: {type(e).__name__}: {e}")
+
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to execute the LangGraph agent."
         )

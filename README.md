@@ -133,3 +133,75 @@ python -m app.smart_search
 ```bash
 python -m eval.run_eval
 ```
+
+## AI Agent and LangGraph
+
+OWASPShield includes an AI agent that can select and execute cybersecurity tools.
+
+### S1 – Custom Agent and Security Tool
+
+- `app/tools.py` – Password hashing configuration checker.
+- `app/agent_loop.py` – Hand-written agent that selects between RAG search and the password configuration checker.
+- Checks Argon2id, bcrypt, and PBKDF2 configurations against the project's OWASP minimum requirements.
+
+### S2 – LangGraph Agent
+
+- `app/graph.py` – Implements the agent workflow using LangGraph.
+- Uses conditional routing to select the appropriate tool.
+- Includes human approval before password configuration checks.
+- Supports approval and rejection.
+- Uses LangGraph MemorySaver to maintain conversation state.
+- Stores conversation history using thread IDs.
+
+### Agent API
+
+**Endpoint:** `POST /agent`
+
+The agent supports two workflows:
+
+1. Cybersecurity questions are routed to the RAG search system and returned with citations.
+2. Password hashing configuration checks require human approval before execution.
+
+**Example: Start an agent request**
+
+```json
+{
+  "question": "Check this password hashing config",
+  "config": {
+    "algorithm": "bcrypt",
+    "work_factor": 8,
+    "max_password_bytes": 72
+  },
+  "thread_id": "test-agent-001",
+  "resume": false
+}
+```
+
+**Example: Approve execution**
+
+```json
+{
+  "thread_id": "test-agent-001",
+  "resume": true,
+  "approved": true
+}
+```
+
+**Example: Reject execution**
+
+```json
+{
+  "thread_id": "test-agent-002",
+  "resume": true,
+  "approved": false
+}
+```
+
+### Technologies
+
+- Python
+- FastAPI
+- LangGraph
+- ChromaDB
+- Google Gemini
+- OWASP security documentation
