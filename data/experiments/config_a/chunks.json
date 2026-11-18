@@ -1,0 +1,1507 @@
+[
+    {
+        "id": "authentication-0001",
+        "text": "Introduction\n**Authentication** (**AuthN**) is the process of verifying that an individual, entity, or website is who or what it claims to be by determining the validity of one or more authenticators (like passwords, fingerprints, or security tokens) that are used to back up this claim.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Introduction"
+    },
+    {
+        "id": "authentication-0002",
+        "text": "Introduction\nds, fingerprints, or security tokens) that are used to back up this claim.\n\n**Digital Identity** is the unique representation of a subject engaged in an online transaction. A digital identity is always unique in the context of a digital service but does not necessarily need to be traceable back to a specific real-life subject.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Introduction"
+    },
+    {
+        "id": "authentication-0003",
+        "text": "Introduction\nnot necessarily need to be traceable back to a specific real-life subject.\n\n**Identity Proofing** establishes that a subject is actually who they claim to be. This concept is related to KYC concepts and it aims to bind a digital identity with a real person.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Introduction"
+    },
+    {
+        "id": "authentication-0004",
+        "text": "Introduction\nto KYC concepts and it aims to bind a digital identity with a real person.\n\n**Session Management** is a process by which a server maintains the state of an entity interacting with it. This is required for a server to remember how to react to subsequent requests throughout a transaction. Sessions are maintained on the server by a session identifier which can be passed back and forth between the client and server when transmitting and receiving requests. Sessions should be unique per user and",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Introduction"
+    },
+    {
+        "id": "authentication-0005",
+        "text": "Introduction\ntransmitting and receiving requests. Sessions should be unique per user and computationally very difficult to predict. The [Session Management Cheat Sheet](Session_Management_Cheat_Sheet.md) contains further guidance on the best practices in this area.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Introduction"
+    },
+    {
+        "id": "authentication-0006",
+        "text": "User IDs\nThe primary function of a User ID is to uniquely identify a user within a system. Ideally, User IDs should be randomly generated to prevent the creation of predictable or sequential IDs, which could pose a security risk, especially in systems where User IDs might be exposed or inferred from external sources.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "User IDs"
+    },
+    {
+        "id": "authentication-0007",
+        "text": "Usernames\nUsernames are easy-to-remember identifiers chosen by the user and used for identifying themselves when logging into a system or service. The terms User ID and username might be used interchangeably if the username chosen by the user also serves as their unique identifier within the system.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Usernames"
+    },
+    {
+        "id": "authentication-0008",
+        "text": "Usernames\nosen by the user also serves as their unique identifier within the system.\n\nUsers should be permitted to use their email address as a username, provided the email is verified during sign-up. Additionally, they should have the option to choose a username other than an email address. For information on validating email addresses, please visit the [input validation cheat sheet email discussion](Input_Validation_Cheat_Sheet.md#email-address-validation).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Usernames"
+    },
+    {
+        "id": "authentication-0009",
+        "text": "Authentication Solution and Sensitive Accounts\n- Do **NOT** allow login with sensitive accounts (i.e. accounts that can be used internally within the solution such as to a backend / middleware / database) to any front-end user interface\n- Do **NOT** use the same authentication solution (e.g. IDP / AD) used internally for unsecured access (e.g., public access / DMZ)",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Authentication Solution and Sensitive Accounts"
+    },
+    {
+        "id": "authentication-0010",
+        "text": "Implement Proper Password Strength Controls\nA key concern when using passwords for authentication is password strength. A \"strong\" password policy makes it difficult or even improbable for one to guess the password through either manual or automated means. The following characteristics define a strong password:\n\n- Password Length\n    - **Minimum** length for passwords should be enforced by the application.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Implement Proper Password Strength Controls"
+    },
+    {
+        "id": "authentication-0011",
+        "text": "Implement Proper Password Strength Controls\n- **Minimum** length for passwords should be enforced by the application.\n        - If MFA is enabled passwords **shorter than 8 characters** are considered to be weak ([NIST SP800-63B](https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver)).\n        - If MFA is not enabled passwords **shorter than 15 characters** are considered to be weak ([NIST SP800-63B](https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver)).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Implement Proper Password Strength Controls"
+    },
+    {
+        "id": "authentication-0012",
+        "text": "Implement Proper Password Strength Controls\nST SP800-63B](https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver)).\n    - **Maximum** password length should be **at least 64 characters** to allow passphrases ([NIST SP800-63B](https://pages.nist.gov/800-63-4/sp800-63b.html#passwordlength)). Note that certain implementations of hashing algorithms may cause [long password denial of service](https://www.acunetix.com/vulnerabilities/web/long-password-denial-of-service/).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Implement Proper Password Strength Controls"
+    },
+    {
+        "id": "authentication-0013",
+        "text": "Implement Proper Password Strength Controls\ns://www.acunetix.com/vulnerabilities/web/long-password-denial-of-service/).\n    - Longer passphrases are effective because they raise the number of guesses an attacker's dictionary or wordlist has to cover, not because of a precise entropy value: NIST notes that \"estimating entropy for user-chosen passwords is challenging\" and recommends length and blocklist checks (see below) over composition or entropy math ([NIST SP800-63B, Strength of",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Implement Proper Password Strength Controls"
+    },
+    {
+        "id": "authentication-0014",
+        "text": "Implement Proper Password Strength Controls\n(see below) over composition or entropy math ([NIST SP800-63B, Strength of Passwords](https://pages.nist.gov/800-63-4/sp800-63b/passwords/#appA)). Entropy estimates rely on assumptions about the search space and should be treated as illustrative rather than as absolute measures of password strength.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Implement Proper Password Strength Controls"
+    },
+    {
+        "id": "authentication-0015",
+        "text": "Implement Proper Password Strength Controls\nated as illustrative rather than as absolute measures of password strength.\n    - Attackers commonly use password guessing techniques that leverage common-password dictionaries and password lists, and may use previously compromised credentials in credential stuffing attacks. These behaviors are reflected in [MITRE ATT&CK T1110 – Brute Force](https://attack.mitre.org/techniques/T1110/), including Password Guessing, Password Spraying, and Credential Stuffing. Screening passwords against",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Implement Proper Password Strength Controls"
+    },
+    {
+        "id": "authentication-0016",
+        "text": "Implement Proper Password Strength Controls\nng, Password Spraying, and Credential Stuffing. Screening passwords against blocklists helps prevent users from selecting passwords that are commonly used or already known to attackers, as recommended by [NIST SP 800-63B – Passwords](https://pages.nist.gov/800-63-4/sp800-63b/passwords/).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Implement Proper Password Strength Controls"
+    },
+    {
+        "id": "authentication-0017",
+        "text": "Implement Proper Password Strength Controls\n800-63B – Passwords](https://pages.nist.gov/800-63-4/sp800-63b/passwords/).\n- Do not silently truncate passwords. The [Password Storage Cheat Sheet](Password_Storage_Cheat_Sheet.md#input-limits-of-bcrypt) provides further guidance on how to handle passwords that are longer than the maximum length.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Implement Proper Password Strength Controls"
+    },
+    {
+        "id": "authentication-0018",
+        "text": "Implement Proper Password Strength Controls\nuidance on how to handle passwords that are longer than the maximum length.\n- Allow usage of **all** characters including unicode and whitespace. There should be no password composition rules limiting the type of characters permitted. There should be no requirement for upper or lower case or numbers or special characters.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Implement Proper Password Strength Controls"
+    },
+    {
+        "id": "authentication-0019",
+        "text": "Implement Proper Password Strength Controls\nbe no requirement for upper or lower case or numbers or special characters.\n- Ensure credential rotation when a password leak occurs, at the time of compromise identification or when authenticator technology changes. Avoid requiring periodic password changes; instead, encourage users to pick strong passwords and enable [Multifactor Authentication Cheat Sheet (MFA)](Multifactor_Authentication_Cheat_Sheet.md). According to NIST guidelines, verifiers should not mandate arbitrary password changes",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Implement Proper Password Strength Controls"
+    },
+    {
+        "id": "authentication-0020",
+        "text": "Implement Proper Password Strength Controls\nto NIST guidelines, verifiers should not mandate arbitrary password changes (e.g., periodically).\n- Include a password strength meter to help users create a more complex password\n    - [zxcvbn-ts library](https://github.com/zxcvbn-ts/zxcvbn) can be used for this purpose.\n    - Other language implementations of zxcvbn [listed here](https://github.com/dropbox/zxcvbn?tab=readme-ov-file); however check the age and maturity of each example before use.\n- Block common and previously breached passwords",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Implement Proper Password Strength Controls"
+    },
+    {
+        "id": "authentication-0021",
+        "text": "Implement Proper Password Strength Controls\nf each example before use.\n- Block common and previously breached passwords\n    - [Pwned Passwords](https://haveibeenpwned.com/Passwords) is a service where passwords can be checked against previously breached passwords. Details on the API [are here](https://haveibeenpwned.com/API/v3#PwnedPasswords).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Implement Proper Password Strength Controls"
+    },
+    {
+        "id": "authentication-0022",
+        "text": "Implement Proper Password Strength Controls\nls on the API [are here](https://haveibeenpwned.com/API/v3#PwnedPasswords).\n    - Alternatively, you can download the [Pwned Passwords](https://haveibeenpwned.com/Passwords) database [using this mechanism](https://github.com/HaveIBeenPwned/PwnedPasswordsDownloader?tab=readme-ov-file#what-is-haveibeenpwned-downloader) to host it yourself.\n    - Other top password lists are available but there is no guarantee as to how updated they are:",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Implement Proper Password Strength Controls"
+    },
+    {
+        "id": "authentication-0023",
+        "text": "Implement Proper Password Strength Controls\nd lists are available but there is no guarantee as to how updated they are:\n        - [Various password lists](https://github.com/danielmiessler/SecLists/tree/master/Passwords) hosted by SecLists from Daniel Miessler.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Implement Proper Password Strength Controls"
+    },
+    {
+        "id": "authentication-0024",
+        "text": "For more detailed information check\n- [ASVS v5.0 Password Security Requirements](https://github.com/OWASP/ASVS/blob/master/5.0/en/0x15-V6-Authentication.md#v62-password-security)\n- [Passwords Evolved: Authentication Guidance for the Modern Era](https://www.troyhunt.com/passwords-evolved-authentication-guidance-for-the-modern-era/)",
+        "source": "authentication.md",
+        "page": null,
+        "title": "For more detailed information check"
+    },
+    {
+        "id": "authentication-0025",
+        "text": "Implement Secure Password Recovery Mechanism\nIt is common for an application to have a mechanism that provides a means for a user to gain access to their account in the event they forget their password. Please see [Forgot Password Cheat Sheet](Forgot_Password_Cheat_Sheet.md) for details on this feature.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Implement Secure Password Recovery Mechanism"
+    },
+    {
+        "id": "authentication-0026",
+        "text": "Store Passwords in a Secure Fashion\nIt is critical for an application to store a password using the right cryptographic technique. Please see [Password Storage Cheat Sheet](Password_Storage_Cheat_Sheet.md) for details on this feature.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Store Passwords in a Secure Fashion"
+    },
+    {
+        "id": "authentication-0027",
+        "text": "Compare Password Hashes Using Safe Functions\nWhere possible, the user-supplied password should be compared to the stored password hash using a secure password comparison function provided by the language or framework, such as the [password_verify()](https://www.php.net/manual/en/function.password-verify.php) function in PHP. Where this is not possible, ensure that the comparison function:\n\n- Has a maximum input length, to protect against denial of service attacks with very long inputs.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Compare Password Hashes Using Safe Functions"
+    },
+    {
+        "id": "authentication-0028",
+        "text": "Compare Password Hashes Using Safe Functions\nlength, to protect against denial of service attacks with very long inputs.\n- Explicitly sets the type of both variables, to protect against type confusion attacks such as Magic Hashes in PHP.\n- Returns in constant time, to protect against timing attacks.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Compare Password Hashes Using Safe Functions"
+    },
+    {
+        "id": "authentication-0029",
+        "text": "Change Password Feature\nWhen developing a change password feature, ensure to have:\n\n- The user is authenticated with an active session.\n- Current password verification. This is to ensure that it's the legitimate user who is changing the password. Consider this abuse case: a user logs in on a public computer and forgets to log out. Another person could then use that active session. If we don't verify the current password, this other person may be able to change the password.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Change Password Feature"
+    },
+    {
+        "id": "authentication-0030",
+        "text": "Transmit Passwords Only Over TLS or Other Strong Transport\nSee: [Transport Layer Security Cheat Sheet](Transport_Layer_Security_Cheat_Sheet.md)\n\nThe login page and all subsequent authenticated pages must be exclusively accessed over TLS or other strong transport. Failure to utilize TLS or other strong transport for the login page allows an attacker to modify the login form action, causing the user's credentials to be posted to an arbitrary location. Failure to utilize TLS or other strong transport for authenticated pages after login enables an attacker",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Transmit Passwords Only Over TLS or Other Strong Transport"
+    },
+    {
+        "id": "authentication-0031",
+        "text": "Transmit Passwords Only Over TLS or Other Strong Transport\ner strong transport for authenticated pages after login enables an attacker to view the unencrypted session ID and compromise the user's authenticated session.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Transmit Passwords Only Over TLS or Other Strong Transport"
+    },
+    {
+        "id": "authentication-0032",
+        "text": "Require Re-authentication for Sensitive Features\nIn order to mitigate CSRF and session hijacking, it's important to require the current credentials for an account before updating sensitive account information such as the user's password or email address -- or before sensitive transactions, such as shipping a purchase to a new address. Without this countermeasure, an attacker may be able to execute sensitive transactions through a CSRF or XSS attack without needing to know the user's current credentials. Additionally, an attacker may get",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Require Re-authentication for Sensitive Features"
+    },
+    {
+        "id": "authentication-0033",
+        "text": "Require Re-authentication for Sensitive Features\ng to know the user's current credentials. Additionally, an attacker may get temporary physical access to a user's browser or steal their session ID to take over the user's session.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Require Re-authentication for Sensitive Features"
+    },
+    {
+        "id": "authentication-0034",
+        "text": "Re-authentication After Risk Events\n**Overview:**\nRe-authentication is critical when an account has experienced high-risk activity such as account recovery, password resets, or suspicious behavior patterns. This section outlines when and how to trigger re-authentication to protect users and prevent unauthorized access. For further details, see the [Require Re-authentication for Sensitive Features](#require-re-authentication-for-sensitive-features) section.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Re-authentication After Risk Events"
+    },
+    {
+        "id": "authentication-0035",
+        "text": "When to Trigger Re-authentication\n- **Suspicious Account Activity**\n  When unusual login patterns, IP address changes, or device enrollments occur\n- **Account Recovery**\n  After users reset their passwords or change sensitive account details\n- **Critical Actions**\n  For high-risk actions like changing payment details or adding new trusted devices",
+        "source": "authentication.md",
+        "page": null,
+        "title": "When to Trigger Re-authentication"
+    },
+    {
+        "id": "authentication-0036",
+        "text": "Re-authentication Mechanisms\n- **Adaptive Authentication**\n  Use risk-based authentication models that adapt to the user's behavior and context\n- **Multi-Factor Authentication (MFA)**\n  Require an additional layer of verification for sensitive actions or events\n- **Bound Authenticators**",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Re-authentication Mechanisms"
+    },
+    {
+        "id": "authentication-0037",
+        "text": "Re-authentication Mechanisms\nof verification for sensitive actions or events\n- **Bound Authenticators**\n  Require an authenticator already bound to the account, such as the current password or a passkey. Do not substitute security questions, which are excluded by [ASVS 6.4.2](https://github.com/OWASP/ASVS/blob/master/5.0/en/0x15-V6-Authentication.md#v64-authentication-factor-lifecycle-and-recovery).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Re-authentication Mechanisms"
+    },
+    {
+        "id": "authentication-0038",
+        "text": "Implementation Recommendations\n- **Minimize User Friction**\n  Ensure that re-authentication does not disrupt the user experience unnecessarily\n- **Context-Aware Decisions**\n  Make re-authentication decisions based on context (e.g., geolocation, device type, prior patterns)\n- **Secure Session Management**\n  Invalidate sessions after re-authentication and rotate tokens—see the [OWASP Session Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html)",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Implementation Recommendations"
+    },
+    {
+        "id": "authentication-0039",
+        "text": "Consider Strong Transaction Authentication\nSome applications should use a second factor to check whether a user may perform sensitive operations. For more information, see the [Transaction Authorization Cheat Sheet](Transaction_Authorization_Cheat_Sheet.md).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Consider Strong Transaction Authentication"
+    },
+    {
+        "id": "authentication-0040",
+        "text": "TLS Client Authentication\nTLS Client Authentication, also known as two-way TLS authentication, consists of both browser and server sending their respective TLS certificates during the TLS handshake process. Just as you can validate the authenticity of a server by using the certificate and asking a verifiably-valid Certificate Authority (CA) if the certificate is valid, the server can authenticate the user by receiving a certificate from the client and validating against a third-party CA or its own CA. To do this, the",
+        "source": "authentication.md",
+        "page": null,
+        "title": "TLS Client Authentication"
+    },
+    {
+        "id": "authentication-0041",
+        "text": "TLS Client Authentication\nient and validating against a third-party CA or its own CA. To do this, the server must provide the user with a certificate generated specifically for him, assigning values to the subject so that these can be used to determine what user the certificate should validate. The user installs the certificate on a browser and now uses it for the website.\n\nThis approach is appropriate when:",
+        "source": "authentication.md",
+        "page": null,
+        "title": "TLS Client Authentication"
+    },
+    {
+        "id": "authentication-0042",
+        "text": "TLS Client Authentication\nowser and now uses it for the website.\n\nThis approach is appropriate when:\n\n- It is acceptable (or even preferred) that the user has access to the website only from a single computer/browser.\n- The user is not easily scared by the process of installing TLS certificates on their browser, or there will be someone, probably from IT support, who will do this for the user.\n- The website requires an extra step of security.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "TLS Client Authentication"
+    },
+    {
+        "id": "authentication-0043",
+        "text": "TLS Client Authentication\nill do this for the user.\n- The website requires an extra step of security.\n- It is also a good thing to use when the website is for an intranet of a company or organization.\n\nIt is generally not a good idea to use this method for widely and publicly available websites that will have an average user. For example, it wouldn't be a good idea to implement this for a website like Facebook. While this technique can prevent the user from having to type a password (thus protecting against an average",
+        "source": "authentication.md",
+        "page": null,
+        "title": "TLS Client Authentication"
+    },
+    {
+        "id": "authentication-0044",
+        "text": "TLS Client Authentication\nthe user from having to type a password (thus protecting against an average keylogger from stealing it), it is still considered a good idea to consider using both a password and TLS client authentication combined.\n\nAdditionally, if the client is behind an enterprise proxy that performs SSL/TLS decryption, this will break certificate authentication unless the site is allowed on the proxy.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "TLS Client Authentication"
+    },
+    {
+        "id": "authentication-0045",
+        "text": "TLS Client Authentication\nbreak certificate authentication unless the site is allowed on the proxy.\n\nFor more information, see: [Client-authenticated TLS handshake](https://en.wikipedia.org/wiki/Transport_Layer_Security#Client-authenticated_TLS_handshake)",
+        "source": "authentication.md",
+        "page": null,
+        "title": "TLS Client Authentication"
+    },
+    {
+        "id": "authentication-0046",
+        "text": "Authentication and Error Messages\nIncorrectly implemented error messages in the case of authentication functionality can be used for the purposes of user ID and password enumeration. An application should respond (both HTTP and HTML) in a generic manner.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Authentication and Error Messages"
+    },
+    {
+        "id": "authentication-0047",
+        "text": "Authentication Responses\nUsing any of the authentication mechanisms (login, password reset, or password recovery), an application must respond with a generic error message regardless of whether:\n\n- The user ID or password was incorrect.\n- The account does not exist.\n- The account is locked or disabled.\n\nThe account registration feature should also be taken into consideration, and the same approach of a generic error message can be applied regarding the case in which the user exists.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Authentication Responses"
+    },
+    {
+        "id": "authentication-0048",
+        "text": "Authentication Responses\nerror message can be applied regarding the case in which the user exists.\n\nThe objective is to prevent the creation of a [discrepancy factor](https://cwe.mitre.org/data/definitions/204.html), allowing an attacker to mount a user enumeration action against the application.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Authentication Responses"
+    },
+    {
+        "id": "authentication-0049",
+        "text": "Authentication Responses\nng an attacker to mount a user enumeration action against the application.\n\nIt is interesting to note that the business logic itself can bring a discrepancy factor related to the processing time taken. Indeed, depending on the implementation, the processing time can be significantly different according to the case (success vs failure) allowing an attacker to mount a [time-based attack](https://en.wikipedia.org/wiki/Timing_attack) (delta of some seconds for example).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Authentication Responses"
+    },
+    {
+        "id": "authentication-0050",
+        "text": "Authentication Responses\n/en.wikipedia.org/wiki/Timing_attack) (delta of some seconds for example).\n\nExample using pseudo-code for a login feature:\n\n- First implementation using the \"quick exit\" approach\n\n```text\nIF USER_EXISTS(username) THEN\n    password_hash=HASH(password)\n    IS_VALID=LOOKUP_CREDENTIALS_IN_STORE(username, password_hash)\n    IF NOT IS_VALID THEN\n        RETURN Error(\"Invalid Username or Password!\")\n    ENDIF\nELSE\n   RETURN Error(\"Invalid Username or Password!\")\nENDIF\n```",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Authentication Responses"
+    },
+    {
+        "id": "authentication-0051",
+        "text": "Authentication Responses\nENDIF\nELSE\n   RETURN Error(\"Invalid Username or Password!\")\nENDIF\n```\n\nIt can be clearly seen that if the user doesn't exist, the application will directly throw an error. Otherwise, when the user exists and the password doesn't, it is apparent that there will be more processing before the application errors out. In return, the response time will be different for the same error, allowing the attacker to differentiate between a wrong username and a wrong password.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Authentication Responses"
+    },
+    {
+        "id": "authentication-0052",
+        "text": "Authentication Responses\ne attacker to differentiate between a wrong username and a wrong password.\n\n- Second implementation without relying on the \"quick exit\" approach:\n\n```text\npassword_hash=HASH(password)\nIS_VALID=LOOKUP_CREDENTIALS_IN_STORE(username, password_hash)\nIF NOT IS_VALID THEN\n   RETURN Error(\"Invalid Username or Password!\")\nENDIF\n```\n\nThis code will go through the same process no matter what the user or the password is, allowing the application to return in approximately the same response time.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Authentication Responses"
+    },
+    {
+        "id": "authentication-0053",
+        "text": "Authentication Responses\nllowing the application to return in approximately the same response time.\n\nThe problem with returning a generic error message for the user is a User Experience (UX) matter. A legitimate user might feel confused with the generic messages, thus making it hard for them to use the application, and might after several retries, leave the application because of its complexity. The decision to return a *generic error message* can be determined based on the criticality of the application and its data.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Authentication Responses"
+    },
+    {
+        "id": "authentication-0054",
+        "text": "Authentication Responses\ncan be determined based on the criticality of the application and its data. For example, for critical applications, the team can decide that under the failure scenario, a user will always be redirected to the support page and a *generic error message* will be returned.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Authentication Responses"
+    },
+    {
+        "id": "authentication-0055",
+        "text": "Authentication Responses\nrected to the support page and a *generic error message* will be returned.\n\nRegarding the user enumeration itself, protection against [brute-force attacks](#protect-against-automated-attacks) is also effective because it prevents an attacker from applying the enumeration at scale. Usage of [CAPTCHA](https://en.wikipedia.org/wiki/CAPTCHA) can be applied to a feature for which a *generic error message* cannot be returned because the *user experience* must be preserved.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Authentication Responses"
+    },
+    {
+        "id": "authentication-0056",
+        "text": "Login\nIncorrect response examples:\n\n- \"Login for User foo: invalid password.\"\n- \"Login failed, invalid user ID.\"\n- \"Login failed; account disabled.\"\n- \"Login failed; this user is not active.\"\n\nCorrect response example:\n\n- \"Login failed; Invalid user ID or password.\"",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Login"
+    },
+    {
+        "id": "authentication-0057",
+        "text": "Password recovery\nIncorrect response examples:\n\n- \"We just sent you a password reset link.\"\n- \"This email address doesn't exist in our database.\"\n\nCorrect response example:\n\n- \"If that email address is in our database, we will send you an email to reset your password.\"",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Password recovery"
+    },
+    {
+        "id": "authentication-0058",
+        "text": "Account creation\nIncorrect response examples:\n\n- \"This user ID is already in use.\"\n- \"Welcome! You have signed up successfully.\"\n\nCorrect response example:\n\n- \"A link to activate your account has been emailed to the address provided.\"",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Account creation"
+    },
+    {
+        "id": "authentication-0059",
+        "text": "Error Codes and URLs\nThe application may return a different [HTTP Error code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) depending on the authentication attempt response. It may respond with a 200 for a positive result and a 403 for a negative result. Even though a generic error page is shown to a user, the HTTP response code may differ which can leak information about whether the account is valid or not.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Error Codes and URLs"
+    },
+    {
+        "id": "authentication-0060",
+        "text": "Error Codes and URLs\nffer which can leak information about whether the account is valid or not.\n\nError disclosure can also be used as a discrepancy factor, consult the [error handling cheat sheet](Error_Handling_Cheat_Sheet.md) regarding the global handling of different errors in an application.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Error Codes and URLs"
+    },
+    {
+        "id": "authentication-0061",
+        "text": "Protect Against Automated Attacks\nThere are a number of different types of automated attacks that attackers can use to try and compromise user accounts. The most common types are listed below:\n\n| Attack Type         | Description                                                                                      |\n|---------------------|--------------------------------------------------------------------------------------------------|",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Protect Against Automated Attacks"
+    },
+    {
+        "id": "authentication-0062",
+        "text": "Protect Against Automated Attacks\n--------------------------------------------------------------------------|\n| Brute Force         | Testing multiple passwords from a dictionary or other source against a single account.           |\n| Credential Stuffing | Testing username/password pairs obtained from the breach of another site.                        |\n| Password Spraying   | Testing a single weak password against a large number of different accounts.                     |",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Protect Against Automated Attacks"
+    },
+    {
+        "id": "authentication-0063",
+        "text": "Protect Against Automated Attacks\nssword against a large number of different accounts.                     |\n\nDifferent protection mechanisms can be implemented to protect against these attacks. In many cases, these defenses do not provide complete protection, but when a number of them are implemented in a defense-in-depth approach, a reasonable level of protection can be achieved.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Protect Against Automated Attacks"
+    },
+    {
+        "id": "authentication-0064",
+        "text": "Protect Against Automated Attacks\nfense-in-depth approach, a reasonable level of protection can be achieved.\n\nThe following sections will focus primarily on preventing brute-force attacks, although these controls can also be effective against other types of attacks. For further guidance on defending against credential stuffing and password spraying, see the [Credential Stuffing Cheat Sheet](Credential_Stuffing_Prevention_Cheat_Sheet.md).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Protect Against Automated Attacks"
+    },
+    {
+        "id": "authentication-0065",
+        "text": "Multi-Factor Authentication\nMulti-factor authentication (MFA) is by far the best defense against the majority of password-related attacks, including brute-force attacks, with analysis by Microsoft suggesting that it would have stopped [99.9% of account compromises](https://techcommunity.microsoft.com/t5/Azure-Active-Directory-Identity/Your-Pa-word-doesn-t-matter/ba-p/731984). As such, it should be implemented wherever possible; however, depending on the audience of the application, it may not be practical or feasible to",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Multi-Factor Authentication"
+    },
+    {
+        "id": "authentication-0066",
+        "text": "Multi-Factor Authentication\non the audience of the application, it may not be practical or feasible to enforce the use of MFA.\n\nThe [Multifactor Authentication Cheat Sheet](Multifactor_Authentication_Cheat_Sheet.md) contains further guidance on implementing MFA.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Multi-Factor Authentication"
+    },
+    {
+        "id": "authentication-0067",
+        "text": "Login Throttling\nLogin Throttling is a security mechanism used to prevent an attacker from making too many attempts at guessing a password through normal interactive means, it includes the following controls:\n\n- Maximum number of attempts.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Login Throttling"
+    },
+    {
+        "id": "authentication-0068",
+        "text": "Account Lockout\nThe most common protection against these attacks is to implement account lockout, which prevents any more login attempts for a period after a certain number of failed logins.\n\nThe counter of failed logins should be associated with the account itself, rather than the source IP address, in order to prevent an attacker from making login attempts from a large number of different IP addresses. There are a number of different factors that should be considered when implementing an account lockout",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Account Lockout"
+    },
+    {
+        "id": "authentication-0069",
+        "text": "Account Lockout\nrent factors that should be considered when implementing an account lockout policy in order to find a balance between security and usability:\n\n- The number of failed attempts before the account is locked out (lockout threshold).\n- The time period that these attempts must occur within (observation window).\n- How long the account is locked out for (lockout duration).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Account Lockout"
+    },
+    {
+        "id": "authentication-0070",
+        "text": "Account Lockout\ntion window).\n- How long the account is locked out for (lockout duration).\n\nRather than implementing a fixed lockout duration (e.g., ten minutes), some applications use an exponential lockout, where the lockout duration starts as a very short period (e.g., one second), but doubles after each failed login attempt.\n\n- Amount of time to delay after each account lockout (max 2-3, after that permanent account lockout).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Account Lockout"
+    },
+    {
+        "id": "authentication-0071",
+        "text": "Account Lockout\nfter each account lockout (max 2-3, after that permanent account lockout).\n\nWhen designing an account lockout system, care must be taken to prevent it from being used to cause a denial of service by locking out other users' accounts. One way this could be performed is to allow the use of the forgotten password functionality to log in, even if the account is locked out.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Account Lockout"
+    },
+    {
+        "id": "authentication-0072",
+        "text": "CAPTCHA\nThe use of an effective CAPTCHA can help to prevent automated login attempts against accounts. However, many CAPTCHA implementations have weaknesses that allow them to be solved using automated techniques or can be outsourced to services that can solve them. As such, the use of CAPTCHA should be viewed as a defense-in-depth control to make brute-force attacks more time-consuming and expensive, rather than as a preventative.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "CAPTCHA"
+    },
+    {
+        "id": "authentication-0073",
+        "text": "CAPTCHA\nattacks more time-consuming and expensive, rather than as a preventative.\n\nIt may be more user-friendly to only require a CAPTCHA be solved after a small number of failed login attempts, rather than requiring it from the very first login.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "CAPTCHA"
+    },
+    {
+        "id": "authentication-0074",
+        "text": "Security Questions and Memorable Words\nDo not use security questions for authentication or re-authentication; [ASVS 6.4.2](https://github.com/OWASP/ASVS/blob/master/5.0/en/0x15-V6-Authentication.md#v64-authentication-factor-lifecycle-and-recovery) excludes knowledge-based authentication. When verifying a password or memorable word, request and verify the full secret rather than selected characters, as required by [NIST SP 800-63B-4](https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver). See the [Choosing and Using Security",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Security Questions and Memorable Words"
+    },
+    {
+        "id": "authentication-0075",
+        "text": "Security Questions and Memorable Words\n/800-63-4/sp800-63b.html#passwordver). See the [Choosing and Using Security Questions Cheat Sheet](Choosing_and_Using_Security_Questions_Cheat_Sheet.md) for guidance limited to legacy systems.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Security Questions and Memorable Words"
+    },
+    {
+        "id": "authentication-0076",
+        "text": "Logging and Monitoring\nEnable logging and monitoring of authentication functions to detect attacks/failures on a real-time basis\n\n- Ensure that all failures are logged and reviewed\n- Ensure that all password failures are logged and reviewed\n- Ensure that all account lockouts are logged and reviewed",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Logging and Monitoring"
+    },
+    {
+        "id": "authentication-0077",
+        "text": "Use of authentication protocols that require no password\nWhile authentication through a combination of username, password, and multi-factor authentication is considered generally secure, there are use cases where it isn't considered the best option or even safe. Examples of this are third-party applications that desire to connect to the web application, either from a mobile device, another website, desktop, or other situations. When this happens, it is NOT considered safe to allow the third-party application to store the user/password combo, since",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Use of authentication protocols that require no password"
+    },
+    {
+        "id": "authentication-0078",
+        "text": "Use of authentication protocols that require no password\no allow the third-party application to store the user/password combo, since then it extends the attack surface into their hands, where it isn't in your control. For this and other use cases, there are several authentication protocols that can protect you from exposing your users' data to attackers.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Use of authentication protocols that require no password"
+    },
+    {
+        "id": "authentication-0079",
+        "text": "OAuth 2.0 and 2.1\nOAuth is an **authorization** framework for delegated access to APIs. See also: [OAuth 2.0 Cheat Sheet](OAuth2_Cheat_Sheet.md).\n\n> **Note:** OAuth 2.1 is an active IETF Working Group draft that consolidates OAuth 2.0 and widely adopted best practices and is intended to replace RFC 6749/6750; guidance in this cheat sheet applies to both OAuth 2.0 and OAuth 2.1. Because Internet-Drafts are revisioned, use the [unversioned OAuth 2.1 Datatracker",
+        "source": "authentication.md",
+        "page": null,
+        "title": "OAuth 2.0 and 2.1"
+    },
+    {
+        "id": "authentication-0080",
+        "text": "OAuth 2.0 and 2.1\nInternet-Drafts are revisioned, use the [unversioned OAuth 2.1 Datatracker page](https://datatracker.ietf.org/doc/draft-ietf-oauth-v2-1/) for the current draft. See also [oauth.net/2.1](https://oauth.net/2.1/).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "OAuth 2.0 and 2.1"
+    },
+    {
+        "id": "authentication-0081",
+        "text": "OpenID Connect (OIDC)\n**OpenID Connect 1.0 (OIDC)** is an identity layer **on top of OAuth**. It defines how a client (**relying party**) verifies the **end user's** identity using an **ID Token** (a signed JWT) and how to obtain user claims in an interoperable way. Use **OIDC for authentication/SSO**; use **OAuth for authorization** to APIs.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "OpenID Connect (OIDC)"
+    },
+    {
+        "id": "authentication-0082",
+        "text": "OIDC implementation guidance\n- **Validate ID Tokens** on the relying party: issuer (`iss`), audience (`aud`), signature (per provider JWKs), expiration (`exp`).\n- Prefer **well-maintained libraries/SDKs** and provider discovery/JWKS endpoints.\n- Use the **UserInfo** endpoint when additional claims beyond the ID Token are required.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "OIDC implementation guidance"
+    },
+    {
+        "id": "authentication-0083",
+        "text": "OIDC implementation guidance\nerInfo** endpoint when additional claims beyond the ID Token are required.\n\n> **Avoid confusion:** **OpenID 2.0 (\"OpenID\")** was a separate, legacy authentication protocol that has been **superseded by OpenID Connect** and is considered obsolete. New systems should not implement OpenID 2.0. References: [OpenID Foundation — obsolete OpenID 2.0 libraries](https://openid.net/developers/libraries-for-obsolete-specifications/), [OpenID 2.0 → OIDC",
+        "source": "authentication.md",
+        "page": null,
+        "title": "OIDC implementation guidance"
+    },
+    {
+        "id": "authentication-0084",
+        "text": "OIDC implementation guidance\n.net/developers/libraries-for-obsolete-specifications/), [OpenID 2.0 → OIDC migration](https://openid.net/specs/openid-connect-migration-1_0.html)",
+        "source": "authentication.md",
+        "page": null,
+        "title": "OIDC implementation guidance"
+    },
+    {
+        "id": "authentication-0085",
+        "text": "Secure Federated Account Linking\nWhen linking an OIDC identity to an existing application account:\n\n- Identify the federated identity using the combination of `iss` (issuer) and `sub` (subject), not `sub` alone. See [OIDC claim stability and uniqueness](https://openid.net/specs/openid-connect-core-1_0.html#ClaimStability).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Secure Federated Account Linking"
+    },
+    {
+        "id": "authentication-0086",
+        "text": "Secure Federated Account Linking\ness](https://openid.net/specs/openid-connect-core-1_0.html#ClaimStability).\n- Do not automatically link accounts solely because their `email`, `preferred_username`, or other profile attributes match. These claims are not guaranteed to be unique or stable, as explained in [OIDC Core Section 5.7](https://openid.net/specs/openid-connect-core-1_0.html#ClaimStability).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Secure Federated Account Linking"
+    },
+    {
+        "id": "authentication-0087",
+        "text": "Secure Federated Account Linking\n5.7](https://openid.net/specs/openid-connect-core-1_0.html#ClaimStability).\n- Require an authenticated session with the existing application account before adding or removing linked identities, as described in [NIST SP 800-63C-4, Section 3.8.1](https://pages.nist.gov/800-63-4/sp800-63c/Federation/). Apply the guidance in [Require Re-authentication for Sensitive Features](#require-re-authentication-for-sensitive-features) before changing account links.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Secure Federated Account Linking"
+    },
+    {
+        "id": "authentication-0088",
+        "text": "Secure Federated Account Linking\nre-re-authentication-for-sensitive-features) before changing account links.\n- Authenticate the identity being added and [validate the resulting ID Token](https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation) before saving the link. Bind the authentication response to the user's linking session using the protections described in the [OAuth 2.0 Cheat Sheet](OAuth2_Cheat_Sheet.md).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Secure Federated Account Linking"
+    },
+    {
+        "id": "authentication-0089",
+        "text": "Secure Federated Account Linking\nrotections described in the [OAuth 2.0 Cheat Sheet](OAuth2_Cheat_Sheet.md).\n- After unlinking, disallow access to the application account through the removed identity. See [NIST SP 800-63C-4, Section 3.8.1](https://pages.nist.gov/800-63-4/sp800-63c/Federation/).\n- Notify the user when an identity is added, or when an identity is removed without terminating the application account, as described in [NIST SP 800-63C-4, Section 3.8](https://pages.nist.gov/800-63-4/sp800-63c/Federation/).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Secure Federated Account Linking"
+    },
+    {
+        "id": "authentication-0090",
+        "text": "SAML\nSecurity Assertion Markup Language (SAML) is often considered to compete with OpenId. The most recommended version is 2.0 since it is very feature-complete and provides strong security. Like OpenId, SAML uses identity providers, but unlike OpenId, it is XML-based and provides more flexibility. SAML is based on browser redirects which send XML data. Furthermore, SAML isn't only initiated by a service provider; it can also be initiated from the identity provider. This allows the user to navigate",
+        "source": "authentication.md",
+        "page": null,
+        "title": "SAML"
+    },
+    {
+        "id": "authentication-0091",
+        "text": "SAML\no be initiated from the identity provider. This allows the user to navigate through different portals while still being authenticated without having to do anything, making the process transparent.\n\nWhile OpenId has taken most of the consumer market, SAML is often the choice for enterprise applications because there are few OpenId identity providers which are considered enterprise-class (meaning that the way they validate the user identity doesn't have high standards required for enterprise",
+        "source": "authentication.md",
+        "page": null,
+        "title": "SAML"
+    },
+    {
+        "id": "authentication-0092",
+        "text": "SAML\nidate the user identity doesn't have high standards required for enterprise identity). It is more common to see SAML being used inside of intranet websites, sometimes even using a server from the intranet as the identity provider.\n\nIn the past few years, applications like SAP ERP and SharePoint (SharePoint by using Active Directory Federation Services 2.0) have decided to use SAML 2.0 authentication as an often preferred method for single sign-on implementations whenever enterprise federation",
+        "source": "authentication.md",
+        "page": null,
+        "title": "SAML"
+    },
+    {
+        "id": "authentication-0093",
+        "text": "SAML\ned method for single sign-on implementations whenever enterprise federation is required for web services and web applications.\n\n**See also: [SAML Security Cheat Sheet](SAML_Security_Cheat_Sheet.md)**",
+        "source": "authentication.md",
+        "page": null,
+        "title": "SAML"
+    },
+    {
+        "id": "authentication-0094",
+        "text": "FIDO\nThe Fast Identity Online (FIDO) Alliance has created two protocols to facilitate online authentication: the Universal Authentication Framework (UAF) protocol and the Universal Second Factor (U2F) protocol. While UAF focuses on passwordless authentication, U2F allows the addition of a second factor to existing password-based authentication. Both protocols are based on a public key cryptography challenge-response model.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "FIDO"
+    },
+    {
+        "id": "authentication-0095",
+        "text": "FIDO\nprotocols are based on a public key cryptography challenge-response model.\n\nUAF takes advantage of existing security technologies present on devices for authentication including fingerprint sensors, cameras (face biometrics), microphones (voice biometrics), Trusted Execution Environments (TEEs), Secure Elements (SEs), and others. The protocol is designed to plug these device capabilities into a common authentication framework. UAF works with both native applications and web applications.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "FIDO"
+    },
+    {
+        "id": "authentication-0096",
+        "text": "FIDO\nn framework. UAF works with both native applications and web applications.\n\nU2F augments password-based authentication using a hardware token (typically USB) that stores cryptographic authentication keys and uses them for signing. The user can use the same token as a second factor for multiple applications. U2F works with web applications. It provides **protection against phishing** by using the URL of the website to look up the stored authentication key.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "FIDO"
+    },
+    {
+        "id": "authentication-0097",
+        "text": "FIDO\nby using the URL of the website to look up the stored authentication key.\n\n**FIDO2**: [FIDO2 combines WebAuthn with the Client-to-Authenticator Protocols (CTAP)](https://fidoalliance.org/specifications/). U2F is now named CTAP1; UAF is a separate protocol. WebAuthn credentials form the foundation of modern **Passkeys** technology. Passkeys enable users to securely log in using local user verification (such as biometrics or device PINs), often with credential synchronization across devices.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "FIDO"
+    },
+    {
+        "id": "authentication-0098",
+        "text": "Hardware-backed Key Storage\nFor many authenticators, including common platform passkeys, the private key is generated and stored by the operating system's secure key manager. Depending on the platform and authenticator, keys may be protected using hardware-backed components such as the Trusted Platform Module (TPM) on Windows, Secure Enclave on Apple devices, or the Android Keystore/StrongBox on Android, or by other software-based mechanisms.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Hardware-backed Key Storage"
+    },
+    {
+        "id": "authentication-0099",
+        "text": "Hardware-backed Key Storage\nroid Keystore/StrongBox on Android, or by other software-based mechanisms.\n\nIn typical implementations, the private key is intended to be non-exportable and bound to the authenticator, and the platform security module signs a server challenge using this key. However, some authenticators support credential synchronization or backup that may involve export or server-side storage, and not all implementations are hardware-backed. Relying parties should not assume that keys are hardware-backed and",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Hardware-backed Key Storage"
+    },
+    {
+        "id": "authentication-0100",
+        "text": "Hardware-backed Key Storage\nbacked. Relying parties should not assume that keys are hardware-backed and non-exportable unless this is verified (for example, via authenticator properties or attestation).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Hardware-backed Key Storage"
+    },
+    {
+        "id": "authentication-0101",
+        "text": "Password Managers\nPassword managers are programs, browser plugins, or web services that automate the management of a large quantity of different credentials. Most password managers have functionality to allow users to easily use them on websites, either:\n(a) by pasting the passwords into the login form\n-- or --\n(b) by simulating the user typing them in.\n\nWeb applications should not make the job of password managers more difficult than necessary by observing the following recommendations:",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Password Managers"
+    },
+    {
+        "id": "authentication-0102",
+        "text": "Password Managers\nmore difficult than necessary by observing the following recommendations:\n\n- Use standard HTML forms for username and password input with appropriate `type` attributes.\n- Avoid plugin-based login pages (such as Flash or Silverlight).\n- Implement a reasonable maximum password length, at least 64 characters, as discussed in the [Implement Proper Password Strength Controls section](#implement-proper-password-strength-controls).\n- Allow any printable characters to be used in passwords.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Password Managers"
+    },
+    {
+        "id": "authentication-0103",
+        "text": "Password Managers\nrength-controls).\n- Allow any printable characters to be used in passwords.\n- Allow users to paste into the username, password, and MFA fields.\n- Allow users to navigate between the username and password field with a single press of the `Tab` key.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Password Managers"
+    },
+    {
+        "id": "authentication-0104",
+        "text": "Changing A User's Registered Email Address\nUser email addresses often change. The following process is recommended to handle such situations in a system:\n\n*Note: The process is less stringent with [Multifactor Authentication](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html), as proof-of-identity is stronger than relying solely on a password.*",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Changing A User's Registered Email Address"
+    },
+    {
+        "id": "authentication-0105",
+        "text": "Recommended Process If the User HAS [Multifactor Authentication](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html) Enabled\n1. Confirm the validity of the user's authentication cookie/token. If not valid, display a login screen.\n2. Describe the process for changing the registered email address to the user.\n3. Ask the user to submit a proposed new email address, ensuring it complies with system rules.\n4. Request the use of [Multifactor Authentication](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html) for identity verification.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Recommended Process If the User HAS [Multifactor Authentication](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html) Enabled"
+    },
+    {
+        "id": "authentication-0106",
+        "text": "Recommended Process If the User HAS [Multifactor Authentication](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html) Enabled\nets/Multifactor_Authentication_Cheat_Sheet.html) for identity verification.\n5. Store the proposed new email address as a pending change.\n6. Create and store **two** time-limited nonces for (a) system administrators' notification, and (b) user confirmation.\n7. Send two email messages with links that include those nonces:\n\n    - A **notification-only email message** to the current address, alerting the user to the impending change and providing a link to report unexpected activity.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Recommended Process If the User HAS [Multifactor Authentication](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html) Enabled"
+    },
+    {
+        "id": "authentication-0107",
+        "text": "Recommended Process If the User HAS [Multifactor Authentication](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html) Enabled\no the impending change and providing a link to report unexpected activity.\n\n    - A **confirmation-required email message** to the proposed new address, instructing the user to confirm the change and providing a link for unexpected situations.\n\n8. Handle responses from the links accordingly.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Recommended Process If the User HAS [Multifactor Authentication](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html) Enabled"
+    },
+    {
+        "id": "authentication-0108",
+        "text": "Recommended Process If the User DOES NOT HAVE Multifactor Authentication Enabled\n1. Confirm the validity of the user's authentication cookie/token. If not valid, display a login screen.\n2. Describe the process for changing the registered email address to the user.\n3. Ask the user to submit a proposed new email address, ensuring it complies with system rules.\n4. Request the user's current password for identity verification.\n5. Store the proposed new email address as a pending change.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Recommended Process If the User DOES NOT HAVE Multifactor Authentication Enabled"
+    },
+    {
+        "id": "authentication-0109",
+        "text": "Recommended Process If the User DOES NOT HAVE Multifactor Authentication Enabled\nverification.\n5. Store the proposed new email address as a pending change.\n6. Create and store three time-limited nonces for system administrators' notification, user confirmation, and an additional step for password reliance.\n7. Send two email messages with links to those nonces:\n\n    - A **confirmation-required email message** to the current address, instructing the user to confirm the change and providing a link for an unexpected situation.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Recommended Process If the User DOES NOT HAVE Multifactor Authentication Enabled"
+    },
+    {
+        "id": "authentication-0110",
+        "text": "Recommended Process If the User DOES NOT HAVE Multifactor Authentication Enabled\ner to confirm the change and providing a link for an unexpected situation.\n\n    - A **separate confirmation-required email message** to the proposed new address, instructing the user to confirm the change and providing a link for unexpected situations.\n\n8. Handle responses from the links accordingly.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Recommended Process If the User DOES NOT HAVE Multifactor Authentication Enabled"
+    },
+    {
+        "id": "authentication-0111",
+        "text": "Notes on the Above Processes\n- It's worth noting that Google adopts a different approach with accounts secured only by a password -- [where the current email address receives a notification-only email](https://support.google.com/accounts/answer/55393?hl=en). This method carries risks and requires user vigilance.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Notes on the Above Processes"
+    },
+    {
+        "id": "authentication-0112",
+        "text": "Notes on the Above Processes\nnswer/55393?hl=en). This method carries risks and requires user vigilance.\n\n- Regular social engineering training is crucial. System administrators and help desk staff should be trained to follow the prescribed process and recognize and respond to social engineering attacks. Refer to [CISA's \"Avoiding Social Engineering and Phishing Attacks\"](https://www.cisa.gov/news-events/news/avoiding-social-engineering-and-phishing-attacks) for guidance.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Notes on the Above Processes"
+    },
+    {
+        "id": "authentication-0113",
+        "text": "Adaptive or Risk Based Authentication\nA feature of more advanced applications is the ability to require different authentication stages depending on various environmental and contextual attributes (including but not limited to, the sensitivity of the data for which access is being requested, time of day, user location, IP address, or device fingerprint).",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Adaptive or Risk Based Authentication"
+    },
+    {
+        "id": "authentication-0114",
+        "text": "Adaptive or Risk Based Authentication\nrequested, time of day, user location, IP address, or device fingerprint).\n\nFor example, an application may require MFA for the first login from a particular device but not for subsequent logins from that device. Alternatively, a single sign-on solution may authenticate the user and allow them to remain logged in for a day but require a reauthentication if they try to access their profile page.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Adaptive or Risk Based Authentication"
+    },
+    {
+        "id": "authentication-0115",
+        "text": "Adaptive or Risk Based Authentication\ny but require a reauthentication if they try to access their profile page.\n\nUse device fingerprints, IP addresses, and remembered-device cookies as risk signals, not as substitutes for authentication. [NIST session guidance](https://pages.nist.gov/800-63-4/sp800-63b/session/) distinguishes an authenticated session secret from device and browser characteristics used for monitoring. Require authentication or a valid authenticated session before exposing private account data. For example, a",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Adaptive or Risk Based Authentication"
+    },
+    {
+        "id": "authentication-0116",
+        "text": "Adaptive or Risk Based Authentication\nauthenticated session before exposing private account data. For example, a banking application may allow balance viewing within an authenticated session and require stronger or fresher authentication for transaction details or money movement.\n\nQuestions that should be considered when implementing a mechanism like this include:\n\n- Are the policies being put in place in line with any corporate policies and especially any regulatory policy?",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Adaptive or Risk Based Authentication"
+    },
+    {
+        "id": "authentication-0117",
+        "text": "Adaptive or Risk Based Authentication\ne in line with any corporate policies and especially any regulatory policy?\n- Which user‑ or device‑attributes (IP, geolocation, device fingerprint, time‑of‑day, behavioral biometrics, etc.) will we monitor at session start?\n- Which of those signals need to be refreshed during an active session, and at what cadence?\n- How will we ensure each signal’s accuracy and handle missing or low‑confidence data?",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Adaptive or Risk Based Authentication"
+    },
+    {
+        "id": "authentication-0118",
+        "text": "Adaptive or Risk Based Authentication\nwe ensure each signal’s accuracy and handle missing or low‑confidence data?\n- What scoring model (weights, thresholds, ML, rule‑based, hybrid) will convert raw signals into a risk tier?\n- Where will the model run (edge, API gateway, central service), and what is our latency budget?\n- What action maps to each risk tier (allow, CAPTCHA, step‑up MFA, block, revoke session)?\n- What user‑facing messages and error codes will accompany each action?",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Adaptive or Risk Based Authentication"
+    },
+    {
+        "id": "authentication-0119",
+        "text": "Adaptive or Risk Based Authentication\nn)?\n- What user‑facing messages and error codes will accompany each action?\n- At which exact code or platform layers will we invoke the risk engine (login controller, middleware, API gateway, service mesh)?\n- How do we propagate decisions consistently across web, mobile, and API clients?\n- How do we mutate, extend, or revoke tokens/cookies when a mid‑session risk check escalates?\n- How do we synchronize state across multiple concurrent devices or browser tabs?",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Adaptive or Risk Based Authentication"
+    },
+    {
+        "id": "authentication-0120",
+        "text": "Adaptive or Risk Based Authentication\ndo we synchronize state across multiple concurrent devices or browser tabs?\n- What monitoring and alerting will be in place for potentially suspicious activity, including how the user is notified.",
+        "source": "authentication.md",
+        "page": null,
+        "title": "Adaptive or Risk Based Authentication"
+    },
+    {
+        "id": "authentication-0121",
+        "text": "References\n- [NIST SP 800-63B-4: Password Verifiers](https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver)\n- [OWASP Application Security Verification Standard (ASVS): V6 Authentication](https://github.com/OWASP/ASVS/blob/master/5.0/en/0x15-V6-Authentication.md#v6-authentication)\n- [OpenID Connect Core 1.0: ID Token Validation](https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation)",
+        "source": "authentication.md",
+        "page": null,
+        "title": "References"
+    },
+    {
+        "id": "password_storage-0122",
+        "text": "Introduction\nThis cheat sheet advises you on the proper methods for storing passwords for authentication. When passwords are stored, they must be protected from an attacker even if the application or database is compromised. Fortunately, a majority of modern languages and frameworks provide built-in functionality to help store passwords safely.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Introduction"
+    },
+    {
+        "id": "password_storage-0123",
+        "text": "Introduction\nframeworks provide built-in functionality to help store passwords safely.\n\nPasswords should never be stored in plain text. Instead, they must be protected using strong, slow hashing algorithms such as Argon2id, bcrypt, or PBKDF2. A unique salt must be added to each password to prevent attackers from using precomputed lookup tables like rainbow tables. Fast hashing algorithms such as SHA‑256 are not suitable for password storage because they allow attackers to perform large numbers of guesses",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Introduction"
+    },
+    {
+        "id": "password_storage-0124",
+        "text": "Introduction\nrd storage because they allow attackers to perform large numbers of guesses quickly. Using slow, memory‑hard algorithms makes brute‑force attacks significantly more difficult, expensive, and time‑consuming.\n\nTo sum up our recommendations:\n\n- **Use [Argon2id](#argon2id) with a minimum configuration of 19 MiB of memory, an iteration count of 2, and 1 degree of parallelism.**",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Introduction"
+    },
+    {
+        "id": "password_storage-0125",
+        "text": "Introduction\nf 19 MiB of memory, an iteration count of 2, and 1 degree of parallelism.**\n- **If [Argon2id](#argon2id) is not available, use [scrypt](#scrypt) with a minimum CPU/memory cost parameter of (2^17), a minimum block size of 8 (1024 bytes), and a parallelization parameter of 1.**\n- **For legacy systems using [bcrypt](#bcrypt), use a work factor of 10 or more and with a password limit of 72 bytes.**",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Introduction"
+    },
+    {
+        "id": "password_storage-0126",
+        "text": "Introduction\n), use a work factor of 10 or more and with a password limit of 72 bytes.**\n- **If FIPS-140 compliance is required, use [PBKDF2](#pbkdf2) with a work factor of 600,000 or more and set with an internal hash function of HMAC-SHA-256.**\n- **Consider using a [pepper](#peppering) to provide additional defense in depth (though alone, it provides no additional secure characteristics).**",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Introduction"
+    },
+    {
+        "id": "password_storage-0127",
+        "text": "Hashing vs Encryption\nHashing and encryption can keep sensitive data safe, but in almost all circumstances, **Passwords should be securely hashed using modern, adaptive hashing algorithms (e.g., Argon2id, bcrypt, or PBKDF2), rather than encrypted or stored in plaintext.**",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Hashing vs Encryption"
+    },
+    {
+        "id": "password_storage-0128",
+        "text": "Hashing vs Encryption\non2id, bcrypt, or PBKDF2), rather than encrypted or stored in plaintext.**\n\nBecause **hashing is a one-way function** (i.e., it is impossible to \"decrypt\" a hash and obtain the original plaintext value), it is the most appropriate approach for password validation. Even if an attacker obtains the hashed password, they cannot use it to log in as the victim.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Hashing vs Encryption"
+    },
+    {
+        "id": "password_storage-0129",
+        "text": "Hashing vs Encryption\nr obtains the hashed password, they cannot use it to log in as the victim.\n\nSince **encryption is a two-way function**, attackers can retrieve the original plaintext from the encrypted data. It can be used to store data such as a user's address since this data is displayed in plaintext on the user's profile. Hashing their address would result in a garbled mess.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Hashing vs Encryption"
+    },
+    {
+        "id": "password_storage-0130",
+        "text": "Hashing vs Encryption\nthe user's profile. Hashing their address would result in a garbled mess.\n\nThe only time encryption should be used in passwords is in edge cases where it is necessary to obtain the original plaintext password. This might be necessary if the application needs to use the password to authenticate with another system that does not support a modern way to programmatically grant access, such as OpenID Connect (OIDC). Wherever possible, an alternative architecture should be used to avoid the need to",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Hashing vs Encryption"
+    },
+    {
+        "id": "password_storage-0131",
+        "text": "Hashing vs Encryption\nr possible, an alternative architecture should be used to avoid the need to store passwords in an encrypted form.\n\nFor further guidance on encryption, see the [Cryptographic Storage Cheat Sheet](Cryptographic_Storage_Cheat_Sheet.md).",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Hashing vs Encryption"
+    },
+    {
+        "id": "password_storage-0132",
+        "text": "When Password Hashes Can Be Cracked\n**Strong passwords stored with modern hashing algorithms and using hashing best practices should be effectively impossible for an attacker to crack.** It is your responsibility as an application owner to select a modern hashing algorithm.\n\nHowever, there are some situations where an attacker can \"crack\" the hashes in some circumstances by doing the following:\n\n- Selecting a password you think the victim has chosen (e.g.`password1!`)\n- Calculating the hash",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "When Password Hashes Can Be Cracked"
+    },
+    {
+        "id": "password_storage-0133",
+        "text": "When Password Hashes Can Be Cracked\nd you think the victim has chosen (e.g.`password1!`)\n- Calculating the hash\n- Comparing the hash you calculated to the hash of the victim. If they match, you have correctly \"cracked\" the hash and now know the plaintext value of their password.\n\nUsually, the attacker will repeat this process with a list of large number of potential candidate passwords, such as:\n\n- Lists of passwords obtained from other compromised sites\n- Brute force (trying every possible candidate)",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "When Password Hashes Can Be Cracked"
+    },
+    {
+        "id": "password_storage-0134",
+        "text": "When Password Hashes Can Be Cracked\nrom other compromised sites\n- Brute force (trying every possible candidate)\n- Dictionaries or wordlists of common passwords\n\nWhile the number of permutations can be enormous, with high speed hardware (such as GPUs) and cloud services with many servers for rent, the cost to an attacker is relatively small to do successful password cracking, especially when best practices for hashing are not followed.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "When Password Hashes Can Be Cracked"
+    },
+    {
+        "id": "password_storage-0135",
+        "text": "Salting\nA salt is a unique, randomly generated string that is added to each password as part of the hashing process. As the salt is unique for every user, an attacker has to crack hashes one at a time using the respective salt rather than calculating a hash once and comparing it against every stored hash. This makes cracking large numbers of hashes significantly harder, as the time required grows in direct proportion to the number of hashes.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Salting"
+    },
+    {
+        "id": "password_storage-0136",
+        "text": "Salting\n, as the time required grows in direct proportion to the number of hashes.\n\nSalting also protects against an attacker's pre-computing hashes using rainbow tables or database-based lookups. Finally, salting means that it is impossible to determine whether two users have the same password without cracking the hashes, as the different salts will result in different hashes even if the passwords are the same.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Salting"
+    },
+    {
+        "id": "password_storage-0137",
+        "text": "Salting\nsalts will result in different hashes even if the passwords are the same.\n\nAt the algorithm and specification level, modern password hashing functions such as [Argon2id](#argon2id), [bcrypt](#bcrypt), and [PBKDF2](#pbkdf2) require the caller to provide a salt.\nHowever, most widely used implementations and libraries automatically generate and manage salts internally, so application developers typically do not need to handle salt generation manually when using these libraries correctly.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Salting"
+    },
+    {
+        "id": "password_storage-0138",
+        "text": "Peppering\n[Peppering](https://datatracker.ietf.org/doc/html/draft-ietf-kitten-password-storage-07#section-4.2) is a class of strategies that can be used in addition to salting to provide an additional layer of protection. It prevents an attacker from being able to crack any of the hashes if they only have access to the database, for example, if they have exploited a SQL injection vulnerability or obtained a backup of the database.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Peppering"
+    },
+    {
+        "id": "password_storage-0139",
+        "text": "Common requirements for peppering strategies\n- A pepper is **shared between stored passwords**, rather than being *unique* to an individual password like a password salt.\n- Unlike a password salt, the pepper should not be public and **should not be stored along with the generated hash**. The pepper should be stored separately from the password database.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Common requirements for peppering strategies"
+    },
+    {
+        "id": "password_storage-0140",
+        "text": "Common requirements for peppering strategies\nhash**. The pepper should be stored separately from the password database.\n- Peppers are secrets and should be stored in \"secrets vaults\" or HSMs (Hardware Security Modules). See the [Secrets Management Cheat Sheet](Secrets_Management_Cheat_Sheet.md) for more information on securely storing secrets.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Common requirements for peppering strategies"
+    },
+    {
+        "id": "password_storage-0141",
+        "text": "Common requirements for peppering strategies\nanagement_Cheat_Sheet.md) for more information on securely storing secrets.\n- In the event of a pepper's compromise, the pepper will have to be changed. Peppers cannot be changed without knowledge of a user's password. Therefore changing a pepper will require forcing all users whose passwords were protected by the previous pepper to reset their passwords.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Common requirements for peppering strategies"
+    },
+    {
+        "id": "password_storage-0142",
+        "text": "Pre-hashing peppers\nIn this strategy, a pepper is added to a password before being hashed by a password hashing algorithm. The computed hash is then stored in the database. In this case the pepper should be a random value generated securely. See the [Cryptographic_Storage_Cheat_Sheet](Cryptographic_Storage_Cheat_Sheet.md#secure-random-number-generation) for more information on securely generating random values.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Pre-hashing peppers"
+    },
+    {
+        "id": "password_storage-0143",
+        "text": "Post-hashing peppers\nIn this strategy, a password is hashed as usual using a password hashing algorithm. The resulting password hash is then hashed again using an HMAC (e.g., HMAC-SHA256, HMAC-SHA512, depending on the desired output length) before storing the resulting hash in the database. In this case the pepper is acting as the HMAC key and should be generated as per requirements of the HMAC algorithm.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Post-hashing peppers"
+    },
+    {
+        "id": "password_storage-0144",
+        "text": "Using Work Factors\nThe work factor is the number of iterations of the hashing algorithm that are performed for each password (usually, it's actually `2^work` iterations). The work factor is typically stored in the hash output. It makes calculating the hash more computationally expensive, which in turn reduces the speed and/or increases the cost for which an attacker can attempt to crack the password hash.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Using Work Factors"
+    },
+    {
+        "id": "password_storage-0145",
+        "text": "Using Work Factors\nses the cost for which an attacker can attempt to crack the password hash.\n\nWhen you choose a work factor, strike a balance between security and performance. Though higher work factors make hashes more difficult for an attacker to crack, they will slow down the process of verifying a login attempt. If the work factor is too high, the performance of the application may be degraded, which could be used by an attacker to carry out a denial of service attack by exhausting the server's CPU with a",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Using Work Factors"
+    },
+    {
+        "id": "password_storage-0146",
+        "text": "Using Work Factors\ncarry out a denial of service attack by exhausting the server's CPU with a large number of login attempts.\n\nThere is no golden rule for the ideal work factor - it will depend on the performance of the server and the number of users on the application. Determining the optimal work factor will require experimentation on the specific server(s) used by the application. As a general rule, calculating a hash should take less than one second.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Using Work Factors"
+    },
+    {
+        "id": "password_storage-0147",
+        "text": "Upgrading the Work Factor\nOne key advantage of having a work factor is that it can be increased over time as hardware becomes more powerful and cheaper.\n\nThe most common approach to upgrading the work factor is to wait until the user next authenticates, then re-hash their password with the new work factor. The different hashes will have different work factors and hashes may never be upgraded if the user doesn't log back into the application. Depending on the application, it may be appropriate to remove the older",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Upgrading the Work Factor"
+    },
+    {
+        "id": "password_storage-0148",
+        "text": "Upgrading the Work Factor\non. Depending on the application, it may be appropriate to remove the older password hashes and require users to reset their passwords next time they need to login in order to avoid storing older and less secure hashes.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Upgrading the Work Factor"
+    },
+    {
+        "id": "password_storage-0149",
+        "text": "Password Hashing Algorithms\nSome modern hashing algorithms have been specifically designed to securely store passwords. This means that they should be slow (unlike algorithms such as MD5 and SHA-1, which were designed to be fast), and you can change how slow they are by changing the work factor.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Password Hashing Algorithms"
+    },
+    {
+        "id": "password_storage-0150",
+        "text": "Password Hashing Algorithms\ne fast), and you can change how slow they are by changing the work factor.\n\nYou do not need to hide which password hashing algorithm is used by an application. If you utilize a modern password hashing algorithm with proper configuration parameters, it should be safe to state in public which password hashing algorithms are in use and be listed [here](https://pulse.michalspacek.cz/passwords/storages).",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Password Hashing Algorithms"
+    },
+    {
+        "id": "password_storage-0151",
+        "text": "Password Hashing Algorithms\nse and be listed [here](https://pulse.michalspacek.cz/passwords/storages).\n\nWhen selecting a password hashing algorithm, developers should prefer modern algorithms that are designed to resist both GPU-based and memory-based attacks.\nWhere available, newer algorithms should be chosen for new applications, while older algorithms may still be acceptable for legacy systems with appropriate configuration.\n\nThree hashing algorithms that should be considered.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Password Hashing Algorithms"
+    },
+    {
+        "id": "password_storage-0152",
+        "text": "Argon2id\n[Argon2](https://en.wikipedia.org/wiki/Argon2) was the winner of the 2015 [Password Hashing Competition](https://en.wikipedia.org/wiki/Password_Hashing_Competition). Out of the three Argon2 versions, use the  Argon2id variant since it provides a balanced approach to resisting both side-channel and GPU-based attacks.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Argon2id"
+    },
+    {
+        "id": "password_storage-0153",
+        "text": "Argon2id\na balanced approach to resisting both side-channel and GPU-based attacks.\n\nArgon2id has three main cost parameters: total memory in KiB (m), the number of passes (t), and the degree of parallelism (p). Parallelism controls the number of lanes over which the memory is divided; increasing p does not multiply the total memory or act as an iteration count. See [RFC 9106 Section 3.1](https://www.rfc-editor.org/rfc/rfc9106.html#section-3.1) for the parameter definitions.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Argon2id"
+    },
+    {
+        "id": "password_storage-0154",
+        "text": "Argon2id\nfc-editor.org/rfc/rfc9106.html#section-3.1) for the parameter definitions.\n\nTune memory and iteration costs to make password cracking expensive while keeping authentication practical under expected load. [Benchmark the chosen parameters on the target system](https://www.rfc-editor.org/rfc/rfc9106.html#section-4); increasing parallelism is not a guarantee of slower password guessing. Use one of the following minimum configurations:\n\n- m=47104 (46 MiB), t=1, p=1 (Do not use with Argon2i)",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Argon2id"
+    },
+    {
+        "id": "password_storage-0155",
+        "text": "Argon2id\nmum configurations:\n\n- m=47104 (46 MiB), t=1, p=1 (Do not use with Argon2i)\n- m=19456 (19 MiB), t=2, p=1 (Do not use with Argon2i)\n- m=12288 (12 MiB), t=3, p=1\n- m=9216 (9 MiB), t=4, p=1\n- m=7168 (7 MiB), t=5, p=1\n\nThese configuration settings provide an equal level of defense, and the only difference is a trade off between CPU and RAM usage.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Argon2id"
+    },
+    {
+        "id": "password_storage-0156",
+        "text": "scrypt\n[scrypt](http://www.tarsnap.com/scrypt/scrypt.pdf) is a password-based key derivation function created by [Colin Percival](https://twitter.com/cperciva). While [Argon2id](#argon2id) should be the best choice for password hashing, [scrypt](#scrypt) should be used when the former is not available.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "scrypt"
+    },
+    {
+        "id": "password_storage-0157",
+        "text": "scrypt\nashing, [scrypt](#scrypt) should be used when the former is not available.\n\nLike [Argon2id](#argon2id), scrypt has three parameters that can be configured: the minimum memory cost parameter (N), the blocksize (r), and the degree of parallelism (p). Use one of the following settings:\n\n- N=2^17 (128 MiB), r=8 (1024 bytes), p=1\n- N=2^16 (64 MiB), r=8 (1024 bytes), p=2\n- N=2^15 (32 MiB), r=8 (1024 bytes), p=3\n- N=2^14 (16 MiB), r=8 (1024 bytes), p=5\n- N=2^13 (8 MiB), r=8 (1024 bytes), p=10",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "scrypt"
+    },
+    {
+        "id": "password_storage-0158",
+        "text": "scrypt\n4 (16 MiB), r=8 (1024 bytes), p=5\n- N=2^13 (8 MiB), r=8 (1024 bytes), p=10\n\nThese configuration settings provide a similar minimal level of defense, with the main trade-off between parallelism and RAM usage.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "scrypt"
+    },
+    {
+        "id": "password_storage-0159",
+        "text": "bcrypt\nThe [bcrypt](https://en.wikipedia.org/wiki/bcrypt) password hashing function **should only** be used for password storage in legacy systems where Argon2 and scrypt are not available.\n\nThe work factor should be as large as verification server performance will allow, with a minimum of 10.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "bcrypt"
+    },
+    {
+        "id": "password_storage-0160",
+        "text": "Input Limits of bcrypt\nbcrypt has a maximum length input length of 72 bytes [for most implementations](https://security.stackexchange.com/questions/39849/does-bcrypt-have-a-maximum-password-length), so you should enforce a maximum password length of 72 bytes (or less if the bcrypt implementation in use has smaller limits).",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Input Limits of bcrypt"
+    },
+    {
+        "id": "password_storage-0161",
+        "text": "Pre-Hashing Passwords with bcrypt\nAn alternative approach is to pre-hash the user-supplied password with a fast algorithm such as SHA-2, HMAC, or BLAKE3 and then to hash the resulting hash value with bcrypt (i.e., `bcrypt(H($password)), $salt, $cost)`)..\nThis can be **dangerous** because of null bytes in the hash output value and because of [password shucking](https://www.youtube.com/watch?v=OQD3qDYMyYQ).",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Pre-Hashing Passwords with bcrypt"
+    },
+    {
+        "id": "password_storage-0162",
+        "text": "Pre-Hashing Passwords with bcrypt\ncause of [password shucking](https://www.youtube.com/watch?v=OQD3qDYMyYQ).\n\nThe original bcrypt expects a null terminated password string, this means that the hash value will only be used to the first null byte in the hash value. (`bcrypt(H($password)), $salt, $cost) == bcrypt(\"\", $salt, $cost)` if `H($password)[0] == 0`)",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Pre-Hashing Passwords with bcrypt"
+    },
+    {
+        "id": "password_storage-0163",
+        "text": "Pre-Hashing Passwords with bcrypt\nrd)), $salt, $cost) == bcrypt(\"\", $salt, $cost)` if `H($password)[0] == 0`)\nThis increases the chance of finding a collision when [combining bcrypt with other hash functions](https://blog.ircmaxell.com/2015/03/security-issue-combining-bcrypt-with.html) and can be avoided by encoding the hash value to printable string with something like base64.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Pre-Hashing Passwords with bcrypt"
+    },
+    {
+        "id": "password_storage-0164",
+        "text": "Pre-Hashing Passwords with bcrypt\nby encoding the hash value to printable string with something like base64.\nbase64 can increases the length of the hash value above 72 characters and so there is a bit of truncation for large hash values from hashes like SHA-512, this is [negligible](https://soatok.blog/2024/11/27/beyond-bcrypt/).\n\nPassword shucking uses the fact, that it is easy to check if  `bcrypt(base64(H($password))), $salt, $cost) == bcrypt(base64($leaked_hash), $salt, $cost)`.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Pre-Hashing Passwords with bcrypt"
+    },
+    {
+        "id": "password_storage-0165",
+        "text": "Pre-Hashing Passwords with bcrypt\n$password))), $salt, $cost) == bcrypt(base64($leaked_hash), $salt, $cost)`.\nIf the inner hash function `H` is used with the same password somewhere else and known to an attacker cracking the password can be reduced to breaking the hash function `H`.\nJust using pure SHA-512, ( i.e. `bcrypt(base64(sha512($password))), $salt, $cost)`) is a **dangerous practice** and is as secure as just using pure SHA-512.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Pre-Hashing Passwords with bcrypt"
+    },
+    {
+        "id": "password_storage-0166",
+        "text": "Pre-Hashing Passwords with bcrypt\n`) is a **dangerous practice** and is as secure as just using pure SHA-512.\nPassword shucking only works if a leaked hash is known to the attacker, either through a breach database or rainbow tables.\nTo mitigate password shucking a [pepper](#peppering) can be used.\n\nTo summarize if bcrypt has to be used and the password should to be pre-hashed you should do `bcrypt(base64(hmac-sha384(data:$password, key:$pepper)), $salt, $cost)` and store the pepper not in the database.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Pre-Hashing Passwords with bcrypt"
+    },
+    {
+        "id": "password_storage-0167",
+        "text": "PBKDF2\nSince [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) is permitted by [NIST SP 800-63B-4](https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver) and has FIPS-140 validated implementations, it should be the preferred algorithm when these are required.\n\nThe PBKDF2 algorithm requires that you select an internal hashing algorithm such as an HMAC or a variety of other hashing algorithms. HMAC-SHA-256 is widely supported and is recommended by NIST.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "PBKDF2"
+    },
+    {
+        "id": "password_storage-0168",
+        "text": "PBKDF2\ng algorithms. HMAC-SHA-256 is widely supported and is recommended by NIST.\n\nThe work factor for PBKDF2 is implemented through an iteration count, which should be set differently based on the internal hashing algorithm used.\n\n- PBKDF2-HMAC-SHA256: 600,000 iterations (recommended)\n- PBKDF2-HMAC-SHA512: 220,000 iterations\n- PBKDF2-HMAC-SHA1: 1,400,000 iterations — **legacy only**, do not select for new systems.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "PBKDF2"
+    },
+    {
+        "id": "password_storage-0169",
+        "text": "Parallel PBKDF2\n- PPBKDF2-SHA512: cost 2\n- PPBKDF2-SHA256: cost 5\n- PPBKDF2-SHA1: cost 10\n\nThese configuration settings are equivalent in the defense they provide. ([Number as of December 2022, based on testing of RTX 4000 GPUs](https://tobtu.com/minimum-password-settings/))",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Parallel PBKDF2"
+    },
+    {
+        "id": "password_storage-0170",
+        "text": "PBKDF2 Pre-Hashing\nWhen PBKDF2 is used with an HMAC, and the password is longer than the hash function's block size (64 bytes for SHA-256), the password will be automatically pre-hashed. For example, the password \"This is a password longer than 512 bits which is the block size of SHA-256\" is converted to the hash value (in hex): `fa91498c139805af73f7ba275cca071e78d78675027000c99a9925e2ec92eedd`.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "PBKDF2 Pre-Hashing"
+    },
+    {
+        "id": "password_storage-0171",
+        "text": "PBKDF2 Pre-Hashing\nhex): `fa91498c139805af73f7ba275cca071e78d78675027000c99a9925e2ec92eedd`.\n\nGood implementations of PBKDF2 perform pre-hashing before the expensive iterated hashing phase. However, some implementations perform the conversion on each iteration, which can make hashing long passwords significantly more expensive than hashing short passwords. When users supply very long passwords, a potential denial of service vulnerability could occur, such as the one published in",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "PBKDF2 Pre-Hashing"
+    },
+    {
+        "id": "password_storage-0172",
+        "text": "PBKDF2 Pre-Hashing\nl denial of service vulnerability could occur, such as the one published in [Django](https://www.djangoproject.com/weblog/2013/sep/15/security/) during 2013. Manual pre-hashing can reduce this risk but requires adding a [salt](#salting) to the pre-hash step.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "PBKDF2 Pre-Hashing"
+    },
+    {
+        "id": "password_storage-0173",
+        "text": "Upgrading Legacy Hashes\nOlder applications that use less secure hashing algorithms, such as MD5 or SHA-1, can be upgraded to modern password hashing algorithms as described above. When the users enter their password (usually by authenticating on the application), that input should be re-hashed using the new algorithm. Defenders should expire the users' current password and require them to enter a new one, so that any older (less secure) hashes of their password are no longer useful to an attacker.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Upgrading Legacy Hashes"
+    },
+    {
+        "id": "password_storage-0174",
+        "text": "Upgrading Legacy Hashes\nless secure) hashes of their password are no longer useful to an attacker.\n\nHowever, this means that old (less secure) password hashes will be stored in the database until the user logs in. You can take one of two approaches to avoid this dilemma.\n\nUpgrade Method One: Expire and delete the password hashes of users who have been inactive for an extended period and require them to reset their passwords to login again. Although secure, this approach is not particularly user-friendly. Expiring the",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Upgrading Legacy Hashes"
+    },
+    {
+        "id": "password_storage-0175",
+        "text": "Upgrading Legacy Hashes\nhough secure, this approach is not particularly user-friendly. Expiring the passwords of many users may cause issues for support staff or may be interpreted by users as an indication of a breach.\n\nUpgrade Method Two: Use the existing password hashes as inputs for a more secure algorithm. For example, if the application originally stored passwords as `md5($password)`, this could be easily upgraded to `bcrypt(md5($password))`. Layering the hashes avoids the need to know the original password;",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Upgrading Legacy Hashes"
+    },
+    {
+        "id": "password_storage-0176",
+        "text": "Upgrading Legacy Hashes\nword))`. Layering the hashes avoids the need to know the original password; however, it can make the hashes easier to crack. These hashes should be replaced with direct hashes of the users' passwords next time the user logs in.\n\nRemember that once your password hashing method is selected, it will have to be upgraded in the future, so ensure that upgrading your hashing algorithm is as easy as possible. During the transition period, allow for a mix of old and new hashing algorithms. Using a mix",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Upgrading Legacy Hashes"
+    },
+    {
+        "id": "password_storage-0177",
+        "text": "Upgrading Legacy Hashes\ntion period, allow for a mix of old and new hashing algorithms. Using a mix of hashing algorithms is easier if the password hashing algorithm and work factor are stored with the password using a standard format, for example, the [modular PHC string format](https://github.com/P-H-C/phc-string-format/blob/master/phc-sf-spec.md).",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "Upgrading Legacy Hashes"
+    },
+    {
+        "id": "password_storage-0178",
+        "text": "International Characters\nYour hashing library must be able to accept a wide range of characters and should be compatible with all Unicode codepoints, so users can use the full range of characters available on modern devices - especially mobile keyboards. They should be able to select passwords from various languages and include pictograms. Prior to hashing the entropy of the user's entry should not be reduced, and password hashing libraries need to be able to use input that may contain a NULL byte.",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "International Characters"
+    },
+    {
+        "id": "password_storage-0179",
+        "text": "References\n- [NIST SP 800-63B-4: Password Verifiers](https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver)\n- [RFC 9106: Argon2 Inputs and Outputs](https://datatracker.ietf.org/doc/html/rfc9106#section-3.1)\n- [RFC 7914: scrypt Parameters](https://www.rfc-editor.org/rfc/rfc7914.html#section-2)",
+        "source": "password_storage.md",
+        "page": null,
+        "title": "References"
+    },
+    {
+        "id": "sql_injection-0180",
+        "text": "Introduction\nA SQL injection attack occurs when untrusted data (usually strings) becomes part of a query's SQL syntax, modifying the logic of the SQL request.\n\nThe malicious data can come from various sources such as:\n\n- an HTTP request (for example, from a malicious user);\n- an LDAP directory;\n- an incoming email;\n- a third party REST API service;\n- the database itself.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Introduction"
+    },
+    {
+        "id": "sql_injection-0181",
+        "text": "Introduction\nn incoming email;\n- a third party REST API service;\n- the database itself.\n\n**Impact:** A successful SQL injection attack can, depending on database features and privileges, read data from the database, modify database data (insert/update/delete), execute administration operations on the database (such as shutdown the DBMS), recover the content of a given file existing on the DBMS file system or write files into the file system, and, in some cases, execute operating system commands.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Introduction"
+    },
+    {
+        "id": "sql_injection-0182",
+        "text": "Introduction\nto the file system, and, in some cases, execute operating system commands.\n\n**Resolution:** define the SQL structure separately from its data values, then bind those values through the database API:\n\n- use parameterized queries for dynamic data values;\n- use fixed application-owned choices for dynamic table names, column names, sort order (`ASC`, `DESC`), etc.\n\nThese controls apply regardless of whether data comes from an HTTP request, another service, or previously stored data.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Introduction"
+    },
+    {
+        "id": "sql_injection-0183",
+        "text": "Introduction\nta comes from an HTTP request, another service, or previously stored data.\n\nA related class of vulnerability affects object-relational mapping (ORM) frameworks, such as JPA/Hibernate, which have their own query language (JPQL/HQL). Applications using these frameworks might be vulnerable to injections of these query languages:\n\n- JPQL injections (JPA);\n- HQL injections (Hibernate).\n\nFor other injection types, see the [Injection Prevention Cheat Sheet](Injection_Prevention_Cheat_Sheet.md).",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Introduction"
+    },
+    {
+        "id": "sql_injection-0184",
+        "text": "Basic SQL injection\nA simple SQL injection flaw in Java is shown below. The \"customerName\" parameter is simply concatenated to build the query and an attacker can enter SQL code into that query and the application would take the attacker's code and execute it on the database.\n\n```java\n// UNSAFE!\nString query = \"SELECT account_balance FROM user_data WHERE user_name = '\"\n    + request.getParameter(\"customerName\") + \"'\";\nStatement statement = connection.createStatement();",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Basic SQL injection"
+    },
+    {
+        "id": "sql_injection-0185",
+        "text": "Basic SQL injection\n(\"customerName\") + \"'\";\nStatement statement = connection.createStatement();\nResultSet results = statement.executeQuery(query);\n```\n\nAs explained below, the recommended safe implementation would use parameterized queries, using `?` as placeholders for the values:\n\n```java\nString query = \"SELECT account_balance FROM user_data WHERE user_name = ?\";\nPreparedStatement statement = connection.prepareStatement(query);\nstatement.setString(1, customerName);\nResultSet results = statement.executeQuery();",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Basic SQL injection"
+    },
+    {
+        "id": "sql_injection-0186",
+        "text": "Basic SQL injection\nt.setString(1, customerName);\nResultSet results = statement.executeQuery();\n```\n\nAn input such as `tom' or '1'='1` is treated as the literal username to match, not as a condition added to the query. Parameter binding prevents this value from changing SQL syntax; it does not decide whether the caller may access the matching account.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Basic SQL injection"
+    },
+    {
+        "id": "sql_injection-0187",
+        "text": "SQL injection with Procedure Calls\nSQL injections can happen as well in procedure calls:\n\n```java\n// UNSAFE\nCallableStatement statement = connection.prepareCall(\"{call sp_updateAccountBalance('\" + customerName + \"' , \" + amount + \")}\");\nstatement.execute();\n```\n\nAs below, the recommended implementation uses parameterized queries:\n\n```java\nCallableStatement statement = connection.prepareCall(\"{call sp_updateAccountBalance(?,?)}\");\nstatement.setString(1, customerName);\nstatement.setBigDecimal(2, amount);\nstatement.execute();\n```",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "SQL injection with Procedure Calls"
+    },
+    {
+        "id": "sql_injection-0188",
+        "text": "SQL injection with Procedure Calls\nustomerName);\nstatement.setBigDecimal(2, amount);\nstatement.execute();\n```\n\nWhile this prevents injection when calling the procedure, the procedure itself might still be vulnerable to SQL injection, as explained in [SQL Injection inside stored Procedures and Functions](#sql-injection-inside-stored-procedures-and-functions).",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "SQL injection with Procedure Calls"
+    },
+    {
+        "id": "sql_injection-0189",
+        "text": "SQL Injection in ORM Query Languages\nSome ORM frameworks such as [Hibernate](https://hibernate.org/) use dedicated query languages, such as Hibernate Query Language (HQL), which may suffer from the same injection problems ([HQL Injection](https://cwe.mitre.org/data/definitions/564.html)):\n\n```java\n// UNSAFE: HQL injection!\nQuery unsafeHQLQuery = session.createQuery(\"from Inventory where productID='\"+userSuppliedParameter+\"'\");\n```\n\nParameterized queries are the recommended solution here as well:\n\n```java",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "SQL Injection in ORM Query Languages"
+    },
+    {
+        "id": "sql_injection-0190",
+        "text": "SQL Injection in ORM Query Languages\nParameterized queries are the recommended solution here as well:\n\n```java\n// Here is a safe version of the same query using named parameters\nQuery safeHQLQuery = session.createQuery(\"from Inventory where productID=:productid\");\nsafeHQLQuery.setParameter(\"productid\", userSuppliedParameter);\n```",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "SQL Injection in ORM Query Languages"
+    },
+    {
+        "id": "sql_injection-0191",
+        "text": "SQL Injection inside stored Procedures and Functions\n**Binding procedure arguments protects the call, not dynamic SQL constructed inside the procedure.**\n\nUse static SQL with parameters, or separately bind data values in internal dynamic queries instead of concatenating them into SQL text. [Microsoft's secure dynamic SQL guidance](https://learn.microsoft.com/en-us/sql/connect/ado-net/sql/writing-secure-dynamic-sql?view=sql-server-ver17) calls for reviewing procedures that construct SQL and parameterizing their commands.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "SQL Injection inside stored Procedures and Functions"
+    },
+    {
+        "id": "sql_injection-0192",
+        "text": "SQL Injection inside stored Procedures and Functions\nreviewing procedures that construct SQL and parameterizing their commands.\n\nFor example, [PostgreSQL documents `EXECUTE ... USING` for binding values](https://www.postgresql.org/docs/current/plpgsql-statements.html#PLPGSQL-STATEMENTS-EXECUTING-DYN) and `format('%I', ...)` for quoting identifiers. Select identifiers from fixed application-owned mappings. Identifier quoting protects SQL syntax, but does not restrict which tables the application may select.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "SQL Injection inside stored Procedures and Functions"
+    },
+    {
+        "id": "sql_injection-0193",
+        "text": "Primary Defenses\nThe preferred patterns are:\n\n- **parameterized queries** when including dynamic data in SQL requests;\n- for structural parts that cannot be parameterized (table names, column names, sort direction), map user choices to a **strict allow-list** of fixed, application-owned values.\n\nRelying on manually escaping dynamic inputs is error-prone and is strongly discouraged.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Primary Defenses"
+    },
+    {
+        "id": "sql_injection-0194",
+        "text": "Parameterized Queries\nDefine the SQL structure separately from its data values and bind those values through the database API, as shown in the [Basic SQL injection](#basic-sql-injection) example. Concatenating untrusted values into the query before preparing it defeats this protection.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Parameterized Queries"
+    },
+    {
+        "id": "sql_injection-0195",
+        "text": "Parameterized Queries\ntrusted values into the query before preparing it defeats this protection.\n\nSee the [Query Parameterization Cheat Sheet](Query_Parameterization_Cheat_Sheet.md) for additional examples of parameterized queries in several languages, including Java, .NET, Ruby, PHP, Cold Fusion, Perl, and Rust. Other examples can be found at [Bobby Tables](https://bobby-tables.com/).",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Parameterized Queries"
+    },
+    {
+        "id": "sql_injection-0196",
+        "text": "Allow-List Input Validation\nParameter markers represent data values, not table names, column names, or SQL keywords such as `ASC` and `DESC`; see the [PDO parameter-marker limitations](https://www.php.net/manual/en/pdo.prepare.php). Keep these structural choices fixed in code where possible. When users need to select among them, map their selection to a small set of application-owned values allowed for that query and reject anything else. In this example, `tableName` can only hold one of two fixed values, so it can be",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Allow-List Input Validation"
+    },
+    {
+        "id": "sql_injection-0197",
+        "text": "Allow-List Input Validation\nis example, `tableName` can only hold one of two fixed values, so it can be appended to the query:\n\n```java\nString tableName;\nswitch(PARAM) {\n  case \"room\":\n    tableName = \"roomTable\";\n    break;\n  case \"floor\":\n    tableName = \"floorTable\";\n    break;\n  default:\n    throw new InputValidationException(\"unexpected table name\");\n}\n```\n\nMap a requested sort direction the same way, to the literal `ASC` or `DESC`, rather than appending the supplied text.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Allow-List Input Validation"
+    },
+    {
+        "id": "sql_injection-0198",
+        "text": "Manually escaping (STRONGLY DISCOURAGED)\n**Do not manually escape untrusted values to construct SQL queries. Use parameterized queries instead.**\n\nManually escaping the values into the SQL string is error-prone and attempts to do something which is normally handled by the database driver through parameter bindings. It can fail and can allow SQL injections for several reasons:\n\n- SQL escaping rules are not always straightforward;\n- different SQL dialects have different rules;",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Manually escaping (STRONGLY DISCOURAGED)"
+    },
+    {
+        "id": "sql_injection-0199",
+        "text": "Manually escaping (STRONGLY DISCOURAGED)\nnot always straightforward;\n- different SQL dialects have different rules;\n- some databases have configuration which might affect the escaping behavior (such as MySQL [NO_BACKSLASH_ESCAPES](https://dev.mysql.com/doc/refman/9.7/en/sql-mode.html#sqlmode_no_backslash_escapes)).\n\nReplace escaping-based query construction with parameter binding.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Manually escaping (STRONGLY DISCOURAGED)"
+    },
+    {
+        "id": "sql_injection-0200",
+        "text": "Hardening\nWe also recommend adopting all of these additional defenses to provide defense in depth to limit damage in case of successful SQL injection attacks.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Hardening"
+    },
+    {
+        "id": "sql_injection-0201",
+        "text": "Least Privilege\nTo minimize the potential damage of a successful SQL injection attack, you should minimize the privileges assigned to every database account in your environment. Start from the ground up to determine what access rights your application accounts require, rather than trying to figure out what access rights you need to take away.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Least Privilege"
+    },
+    {
+        "id": "sql_injection-0202",
+        "text": "Least Privilege\nrather than trying to figure out what access rights you need to take away.\n\nMake sure that accounts that only need read access are only granted read access to the tables they need access to. DO NOT ASSIGN DBA OR ADMIN TYPE ACCESS TO YOUR APPLICATION ACCOUNTS. We understand that this is easy, and everything just \"works\" when you do it this way, but it is very dangerous.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Least Privilege"
+    },
+    {
+        "id": "sql_injection-0203",
+        "text": "Minimizing Application and OS Privileges\nSQL injection is not the only threat to your database data. Attackers can simply change the parameter values from one of the legal values they are presented with, to a value that is unauthorized for them, but the application itself might be authorized to access. As such, minimizing the privileges granted to your application will reduce the likelihood of such unauthorized access attempts, even when an attacker is not trying to use SQL injection as part of their exploit.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Minimizing Application and OS Privileges"
+    },
+    {
+        "id": "sql_injection-0204",
+        "text": "Minimizing Application and OS Privileges\nn an attacker is not trying to use SQL injection as part of their exploit.\n\nWhile you are at it, you should minimize the privileges of the operating system account that the DBMS runs under. Don't run your DBMS as root or system! Most DBMSs run out of the box with a very powerful system account. For example, MySQL runs as system on Windows by default! Change the DBMS's OS account to something more appropriate, with restricted privileges.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Minimizing Application and OS Privileges"
+    },
+    {
+        "id": "sql_injection-0205",
+        "text": "Details Of Least Privilege When Developing\nIf an account only needs access to portions of a table, consider creating a view that limits access to that portion of the data and assigning the account access to the view instead of the underlying table. Rarely, if ever, grant create or delete access to database accounts.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Details Of Least Privilege When Developing"
+    },
+    {
+        "id": "sql_injection-0206",
+        "text": "Details Of Least Privilege When Developing\nable. Rarely, if ever, grant create or delete access to database accounts.\n\nIf you adopt a policy where you use stored procedures everywhere, and don't allow application accounts to directly execute their own queries, then restrict those accounts to only be able to execute the stored procedures they need. Don't grant them any rights directly to the tables in the database.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Details Of Least Privilege When Developing"
+    },
+    {
+        "id": "sql_injection-0207",
+        "text": "Least Admin Privileges For Multiple DBs\nThe designers of web applications should avoid using the same owner/admin account in the web applications to connect to the database. Different DB users should be used for different web applications.\n\nIn general, each separate web application that requires access to the database should have a designated database user account that the application will use to connect to the DB. That way, the designer of the application can have good granularity in the access control, thus reducing the privileges",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Least Admin Privileges For Multiple DBs"
+    },
+    {
+        "id": "sql_injection-0208",
+        "text": "Least Admin Privileges For Multiple DBs\nn have good granularity in the access control, thus reducing the privileges as much as possible. Each DB user will then have select access to only what it needs, and write-access as needed.\n\nAs an example, a login page requires read access to the username and password fields of a table, but no write access of any form (no insert, update, or delete). However, the sign-up page certainly requires insert privilege to that table; this restriction can only be enforced if these web apps use different",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Least Admin Privileges For Multiple DBs"
+    },
+    {
+        "id": "sql_injection-0209",
+        "text": "Least Admin Privileges For Multiple DBs\nable; this restriction can only be enforced if these web apps use different DB users to connect to the database.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Least Admin Privileges For Multiple DBs"
+    },
+    {
+        "id": "sql_injection-0210",
+        "text": "Enhancing Least Privilege with SQL Views\nYou can use SQL views to further increase the granularity of access by limiting the read access to specific fields of a table or joins of tables. It could have additional benefits.\n\nFor example, a product catalog can use a view that exposes product names and retail prices while omitting supplier costs. Grant the application's database account only `SELECT` access to that view, without access to the underlying table or other objects that expose the omitted fields. Verify your database's view",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Enhancing Least Privilege with SQL Views"
+    },
+    {
+        "id": "sql_injection-0211",
+        "text": "Enhancing Least Privilege with SQL Views\nr other objects that expose the omitted fields. Verify your database's view privilege rules; for example, [PostgreSQL normally checks underlying table access using the view owner's privileges](https://www.postgresql.org/docs/current/sql-createview.html).\n\nThis limits the data exposed through a compromised application account. Queries against views still require parameterization to prevent SQL injection.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Enhancing Least Privilege with SQL Views"
+    },
+    {
+        "id": "sql_injection-0212",
+        "text": "Input Validation\nInput validation complements parameter binding; it does not replace it. Continue binding all data values, even when they pass type, length, or format checks. Validation of a value does not make it safe to concatenate into SQL, and a validation approach that is safe for one SQL dialect may be unsafe for another. See the [Input Validation Cheat Sheet](Input_Validation_Cheat_Sheet.md).",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Input Validation"
+    },
+    {
+        "id": "sql_injection-0213",
+        "text": "Testing and detection\nReview query construction in application code and stored procedures. Check that untrusted values are bound rather than concatenated into SQL, and that dynamic identifiers and sort directions come from the query's fixed mapping. Preparing the outer call is not evidence that a procedure's internal SQL is safe.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Testing and detection"
+    },
+    {
+        "id": "sql_injection-0214",
+        "text": "Testing and detection\nng the outer call is not evidence that a procedure's internal SQL is safe.\n\nUse the [OWASP Web Security Testing Guide's SQL injection tests](https://wstg.owasp.org/v4.2/4-Web_Application_Security_Testing/07-Input_Validation_Testing/05-Testing_for_SQL_Injection/) for manual and automated testing, including blind and out-of-band techniques.",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "Testing and detection"
+    },
+    {
+        "id": "sql_injection-0215",
+        "text": "References\n- [Oracle JDBC: Using Prepared Statements](https://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html)\n- [PostgreSQL: Executing Dynamic Commands](https://www.postgresql.org/docs/current/plpgsql-statements.html#PLPGSQL-STATEMENTS-EXECUTING-DYN)\n- [PHP PDO: Parameter-Marker Limitations](https://www.php.net/manual/en/pdo.prepare.php)",
+        "source": "sql_injection.md",
+        "page": null,
+        "title": "References"
+    }
+]

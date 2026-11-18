@@ -1,0 +1,93 @@
+
+[
+  {
+    "id": "Q1",
+    "question": "How should I store user passwords securely?",
+    "expected_keywords": ["hashing", "salt", "Argon2id"],
+    "expected_behavior": "answer"
+  },
+  {
+    "id": "Q2",
+    "question": "Which password hashing algorithm should I use?",
+    "expected_keywords": ["Argon2id", "bcrypt", "PBKDF2"],
+    "expected_behavior": "answer"
+  },
+  {
+    "id": "Q3",
+    "question": "Why should every password have a unique salt?",
+    "expected_keywords": ["unique salt", "rainbow tables"],
+    "expected_behavior": "answer"
+  },
+  {
+    "id": "Q4",
+    "question": "How can I protect login endpoints against repeated failed attempts?",
+    "expected_keywords": ["login throttling", "account lockout", "CAPTCHA"],
+    "expected_behavior": "answer"
+  },
+  {
+    "id": "Q5",
+    "question": "How can I prevent SQL injection when accepting user input?",
+    "expected_keywords": ["parameterized queries", "input validation"],
+    "expected_behavior": "answer"
+  },
+  {
+    "id": "Q6",
+    "question": "How can I configure AWS CloudTrail to detect suspicious API activity?",
+    "expected_keywords": [],
+    "expected_behavior": "abstain"
+  },
+  {
+    "id": "Q7",
+    "question": "Why is multifactor authentication important?",
+    "expected_keywords": ["multifactor authentication", "additional authentication"],
+    "expected_behavior": "answer"
+  },
+  {
+    "id": "Q8",
+    "question": "What authentication protections should a login system include?",
+    "expected_keywords": ["password strength", "login throttling", "multifactor"],
+    "expected_behavior": "answer"
+  },
+  {
+    "id": "Q9",
+    "question": "What are the risks of storing passwords using weak hashing methods?",
+    "expected_keywords": ["fast hashing", "brute force", "password hashes"],
+    "expected_behavior": "answer"
+  },
+  {
+    "id": "Q10",
+    "question": "Which OWASP Top 10 categories are covered by the current OWASPShield records?",
+    "expected_keywords": ["authentication", "password storage", "SQL injection"],
+    "expected_behavior": "answer"
+  },
+  {
+    "id": "Q11",
+    "question": "How should an application securely handle password recovery?",
+    "expected_keywords": ["password recovery", "secure", "authentication"],
+    "expected_behavior": "answer"
+  },
+  {
+    "id": "Q12",
+    "question": "Why should passwords only be transmitted over TLS?",
+    "expected_keywords": ["TLS", "transport", "passwords"],
+    "expected_behavior": "answer"
+  },
+  {
+    "id": "Q13",
+    "question": "What is peppering in password storage?",
+    "expected_keywords": ["pepper", "secret", "password hashing"],
+    "expected_behavior": "answer"
+  },
+  {
+    "id": "Q14",
+    "question": "Why are parameterized queries important for database security?",
+    "expected_keywords": ["parameterized queries", "SQL injection"],
+    "expected_behavior": "answer"
+  },
+  {
+    "id": "Q15",
+    "question": "How does the principle of least privilege help prevent SQL injection damage?",
+    "expected_keywords": ["least privilege", "database privileges"],
+    "expected_behavior": "answer"
+  }
+]

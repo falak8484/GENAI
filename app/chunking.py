@@ -1,3 +1,4 @@
+
 import json
 import re
 from pathlib import Path
@@ -12,10 +13,17 @@ CHUNK_OVERLAP = 150
 
 def split_text(text, max_size=MAX_CHUNK_SIZE, overlap=CHUNK_OVERLAP):
     """Split long text into smaller chunks with overlapping content."""
+
     text = text.strip()
 
     if not text:
         return []
+
+    if max_size <= 0:
+        raise ValueError("max_size must be greater than 0")
+
+    if overlap < 0 or overlap >= max_size:
+        raise ValueError("overlap must be >= 0 and smaller than max_size")
 
     if len(text) <= max_size:
         return [text]
@@ -50,6 +58,7 @@ def split_text(text, max_size=MAX_CHUNK_SIZE, overlap=CHUNK_OVERLAP):
 
 def extract_sections(file_path):
     """Extract Markdown sections and their titles."""
+
     lines = file_path.read_text(encoding="utf-8").splitlines()
 
     document_title = file_path.stem.replace("_", " ").title()
@@ -89,15 +98,23 @@ def extract_sections(file_path):
     return sections
 
 
-def chunk_documents():
+def chunk_documents(
+    max_size=MAX_CHUNK_SIZE,
+    overlap=CHUNK_OVERLAP
+):
     """Create chunks from all OWASP Markdown documents."""
+
     all_chunks = []
 
     for file_path in sorted(RAW_DIR.glob("*.md")):
         sections = extract_sections(file_path)
 
         for title, content in sections:
-            text_chunks = split_text(content)
+            text_chunks = split_text(
+                content,
+                max_size=max_size,
+                overlap=overlap
+            )
 
             for chunk_text in text_chunks:
                 chunk_id = f"{file_path.stem}-{len(all_chunks) + 1:04d}"
@@ -113,17 +130,28 @@ def chunk_documents():
     return all_chunks
 
 
-if __name__ == "__main__":
-    chunks = chunk_documents()
+def save_chunks(chunks, output_file):
+    """Save generated chunks to a JSON file."""
 
-    OUTPUT_FILE.write_text(
+    output_file = Path(output_file)
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+
+    output_file.write_text(
         json.dumps(chunks, indent=4, ensure_ascii=False),
         encoding="utf-8"
     )
 
-    print("Chunking completed!")
     print("Total chunks:", len(chunks))
-    print("Saved to:", OUTPUT_FILE)
+    print("Saved to:", output_file)
+
+
+if __name__ == "__main__":
+
+    chunks = chunk_documents()
+
+    save_chunks(chunks, OUTPUT_FILE)
+
+    print("\nChunking completed!")
 
     if chunks:
         print("\nFirst chunk:")

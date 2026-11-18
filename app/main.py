@@ -4,6 +4,7 @@ from pydantic import BaseModel
 import json
 from pathlib import Path
 
+from app.rag import ask_question
 from app.smart_search import search_records
 from app.llm import generate_response
 from app.vectorstore import semantic_search
@@ -12,7 +13,7 @@ from app.vectorstore import semantic_search
 app = FastAPI(
     title="OWASPShield API",
     description="API for OWASP security cheat sheet records",
-    version="1.3"
+    version="1.4"
 )
 
 
@@ -109,7 +110,7 @@ def search(q: str):
     return search_records(q)
 
 
-# NEW: Semantic search using ChromaDB
+# Semantic search using ChromaDB
 @app.get("/search/semantic")
 def search_semantic(q: str):
     if not q.strip():
@@ -136,9 +137,37 @@ def search_semantic(q: str):
         )
 
 
+# NEW: RAG endpoint using OWASP documents
+@app.post("/ask")
+def ask(data: Question):
+
+    if not data.question.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Question cannot be empty"
+        )
+
+    try:
+        result = ask_question(data.question)
+
+        return {
+            "question": data.question,
+            "answer": result["answer"],
+            "citations": result["citations"]
+        }
+
+    except Exception as e:
+        print(f"RAG ERROR: {type(e).__name__}: {e}")
+
+        raise HTTPException(
+            status_code=502,
+            detail="Unable to generate a RAG response."
+        )
+
+
 # Existing questions endpoint
 @app.post("/questions")
-def ask_question(data: Question):
+def ask_question_endpoint(data: Question):
     if not data.question.strip():
         raise HTTPException(
             status_code=400,

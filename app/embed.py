@@ -28,6 +28,7 @@ def get_client():
 
 
 def embed_texts(texts, task_type="RETRIEVAL_DOCUMENT"):
+
     if not texts:
         return []
 
@@ -53,23 +54,33 @@ def embed_texts(texts, task_type="RETRIEVAL_DOCUMENT"):
 
 
 def embed_query(question):
+
     vectors = embed_texts(
         [question],
         task_type="RETRIEVAL_QUERY"
     )
+
     return vectors[0]
 
 
-def embed_documents():
-    with CHUNKS_FILE.open("r", encoding="utf-8") as file:
+def embed_documents(
+    chunks_file=CHUNKS_FILE,
+    embedded_file=EMBEDDED_FILE
+):
+    """Generate document embeddings and save progress separately."""
+
+    chunks_file = Path(chunks_file)
+    embedded_file = Path(embedded_file)
+
+    with chunks_file.open("r", encoding="utf-8") as file:
         chunks = json.load(file)
 
     if not chunks:
         raise ValueError("No chunks found. Run app.chunking first.")
 
-    # Load previously saved embeddings, if available.
-    if EMBEDDED_FILE.exists():
-        with EMBEDDED_FILE.open("r", encoding="utf-8") as file:
+    # Load previously saved embeddings for this dataset.
+    if embedded_file.exists():
+        with embedded_file.open("r", encoding="utf-8") as file:
             saved_chunks = json.load(file)
     else:
         saved_chunks = []
@@ -99,7 +110,10 @@ def embed_documents():
         len(remaining_chunks) + BATCH_SIZE - 1
     ) // BATCH_SIZE
 
+    embedded_file.parent.mkdir(parents=True, exist_ok=True)
+
     for start in range(0, len(remaining_chunks), BATCH_SIZE):
+
         batch_number = start // BATCH_SIZE + 1
         batch = remaining_chunks[start:start + BATCH_SIZE]
 
@@ -112,6 +126,9 @@ def embed_documents():
                 task_type="RETRIEVAL_DOCUMENT"
             )
         )
+
+        if len(response.embeddings) != len(batch):
+            raise ValueError("Embedding count does not match batch size.")
 
         for chunk, embedding in zip(batch, response.embeddings):
             saved_embeddings[chunk["id"]] = {
@@ -126,7 +143,7 @@ def embed_documents():
             if chunk["id"] in saved_embeddings
         ]
 
-        with EMBEDDED_FILE.open("w", encoding="utf-8") as file:
+        with embedded_file.open("w", encoding="utf-8") as file:
             json.dump(completed_chunks, file)
 
         print(
@@ -143,12 +160,17 @@ def embed_documents():
 
     print("\nDocument embedding completed!")
     print("Total embedded chunks:", len(saved_embeddings))
-    print("Vector dimensions:", len(next(iter(saved_embeddings.values()))["embedding"]))
-    print("Saved to:", EMBEDDED_FILE)
+    print(
+        "Vector dimensions:",
+        len(next(iter(saved_embeddings.values()))["embedding"])
+    )
+    print("Saved to:", embedded_file)
 
 
 if __name__ == "__main__":
+
     try:
         embed_documents()
+
     except Exception as error:
         print("Embedding failed:", type(error).__name__, error)

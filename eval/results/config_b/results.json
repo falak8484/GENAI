@@ -1,0 +1,871 @@
+{
+    "configuration": "config_b",
+    "settings": {
+        "chunk_size": 1000,
+        "overlap": 150,
+        "top_k": 5
+    },
+    "total_questions": 15,
+    "answer_questions": 14,
+    "average_keyword_coverage": 0.7738,
+    "results": [
+        {
+            "id": "Q1",
+            "question": "How should I store user passwords securely?",
+            "expected_behavior": "answer",
+            "matched_keywords": [
+                "hashing",
+                "salt",
+                "Argon2id"
+            ],
+            "expected_keywords": [
+                "hashing",
+                "salt",
+                "Argon2id"
+            ],
+            "keyword_coverage": 1.0,
+            "top_results": [
+                {
+                    "id": "authentication-0015",
+                    "title": "Store Passwords in a Secure Fashion",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Store Passwords in a Secure Fashion\nIt is critical for an application to store a password using the right cryptographic technique. Please see [Password Storage Cheat Sheet](Password_Storage_Cheat_Sheet.md) for details on this feature.",
+                    "similarity": 0.7499
+                },
+                {
+                    "id": "password_storage-0071",
+                    "title": "Introduction",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Introduction\nThis cheat sheet advises you on the proper methods for storing passwords for authentication. When passwords are stored, they must be protected from an attacker even if the application or database is compromised. Fortunately, a majority of modern languages and frameworks provide built-in functionality to help store passwords safely.\n\nPasswords should never be stored in plain text. Instead, they must be protected using strong, slow hashing algorithms such as Argon2id, bcrypt, or PBKDF2. A unique salt must be added to each password to prevent attackers from using precomputed lookup tables like rainbow tables. Fast hashing algorithms such as SHA‑256 are not suitable for password storage because they allow attackers to perform large numbers of guesses quickly. Using slow, memory‑hard algorithms makes brute‑force attacks significantly more difficult, expensive, and time‑consuming.\n\nTo sum up our recommendations:",
+                    "similarity": 0.7485
+                },
+                {
+                    "id": "password_storage-0086",
+                    "title": "Password Hashing Algorithms",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Password Hashing Algorithms\nSome modern hashing algorithms have been specifically designed to securely store passwords. This means that they should be slow (unlike algorithms such as MD5 and SHA-1, which were designed to be fast), and you can change how slow they are by changing the work factor.\n\nYou do not need to hide which password hashing algorithm is used by an application. If you utilize a modern password hashing algorithm with proper configuration parameters, it should be safe to state in public which password hashing algorithms are in use and be listed [here](https://pulse.michalspacek.cz/passwords/storages).\n\nWhen selecting a password hashing algorithm, developers should prefer modern algorithms that are designed to resist both GPU-based and memory-based attacks.\nWhere available, newer algorithms should be chosen for new applications, while older algorithms may still be acceptable for legacy systems with appropriate configuration.\n\nThree hashing algorithms that should be considered.",
+                    "similarity": 0.7451
+                },
+                {
+                    "id": "password_storage-0073",
+                    "title": "Hashing vs Encryption",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Hashing vs Encryption\nHashing and encryption can keep sensitive data safe, but in almost all circumstances, **Passwords should be securely hashed using modern, adaptive hashing algorithms (e.g., Argon2id, bcrypt, or PBKDF2), rather than encrypted or stored in plaintext.**\n\nBecause **hashing is a one-way function** (i.e., it is impossible to \"decrypt\" a hash and obtain the original plaintext value), it is the most appropriate approach for password validation. Even if an attacker obtains the hashed password, they cannot use it to log in as the victim.\n\nSince **encryption is a two-way function**, attackers can retrieve the original plaintext from the encrypted data. It can be used to store data such as a user's address since this data is displayed in plaintext on the user's profile. Hashing their address would result in a garbled mess.",
+                    "similarity": 0.7337
+                },
+                {
+                    "id": "password_storage-0098",
+                    "title": "Upgrading Legacy Hashes",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Upgrading Legacy Hashes\nOlder applications that use less secure hashing algorithms, such as MD5 or SHA-1, can be upgraded to modern password hashing algorithms as described above. When the users enter their password (usually by authenticating on the application), that input should be re-hashed using the new algorithm. Defenders should expire the users' current password and require them to enter a new one, so that any older (less secure) hashes of their password are no longer useful to an attacker.\n\nHowever, this means that old (less secure) password hashes will be stored in the database until the user logs in. You can take one of two approaches to avoid this dilemma.",
+                    "similarity": 0.7321
+                }
+            ],
+            "abstention_assessment": "not_applicable"
+        },
+        {
+            "id": "Q2",
+            "question": "Which password hashing algorithm should I use?",
+            "expected_behavior": "answer",
+            "matched_keywords": [
+                "Argon2id",
+                "bcrypt",
+                "PBKDF2"
+            ],
+            "expected_keywords": [
+                "Argon2id",
+                "bcrypt",
+                "PBKDF2"
+            ],
+            "keyword_coverage": 1.0,
+            "top_results": [
+                {
+                    "id": "password_storage-0086",
+                    "title": "Password Hashing Algorithms",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Password Hashing Algorithms\nSome modern hashing algorithms have been specifically designed to securely store passwords. This means that they should be slow (unlike algorithms such as MD5 and SHA-1, which were designed to be fast), and you can change how slow they are by changing the work factor.\n\nYou do not need to hide which password hashing algorithm is used by an application. If you utilize a modern password hashing algorithm with proper configuration parameters, it should be safe to state in public which password hashing algorithms are in use and be listed [here](https://pulse.michalspacek.cz/passwords/storages).\n\nWhen selecting a password hashing algorithm, developers should prefer modern algorithms that are designed to resist both GPU-based and memory-based attacks.\nWhere available, newer algorithms should be chosen for new applications, while older algorithms may still be acceptable for legacy systems with appropriate configuration.\n\nThree hashing algorithms that should be considered.",
+                    "similarity": 0.7701
+                },
+                {
+                    "id": "password_storage-0072",
+                    "title": "Introduction",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Introduction\ng slow, memory‑hard algorithms makes brute‑force attacks significantly more difficult, expensive, and time‑consuming.\n\nTo sum up our recommendations:\n\n- **Use [Argon2id](#argon2id) with a minimum configuration of 19 MiB of memory, an iteration count of 2, and 1 degree of parallelism.**\n- **If [Argon2id](#argon2id) is not available, use [scrypt](#scrypt) with a minimum CPU/memory cost parameter of (2^17), a minimum block size of 8 (1024 bytes), and a parallelization parameter of 1.**\n- **For legacy systems using [bcrypt](#bcrypt), use a work factor of 10 or more and with a password limit of 72 bytes.**\n- **If FIPS-140 compliance is required, use [PBKDF2](#pbkdf2) with a work factor of 600,000 or more and set with an internal hash function of HMAC-SHA-256.**\n- **Consider using a [pepper](#peppering) to provide additional defense in depth (though alone, it provides no additional secure characteristics).**",
+                    "similarity": 0.75
+                },
+                {
+                    "id": "password_storage-0098",
+                    "title": "Upgrading Legacy Hashes",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Upgrading Legacy Hashes\nOlder applications that use less secure hashing algorithms, such as MD5 or SHA-1, can be upgraded to modern password hashing algorithms as described above. When the users enter their password (usually by authenticating on the application), that input should be re-hashed using the new algorithm. Defenders should expire the users' current password and require them to enter a new one, so that any older (less secure) hashes of their password are no longer useful to an attacker.\n\nHowever, this means that old (less secure) password hashes will be stored in the database until the user logs in. You can take one of two approaches to avoid this dilemma.",
+                    "similarity": 0.7441
+                },
+                {
+                    "id": "password_storage-0095",
+                    "title": "PBKDF2",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "PBKDF2\nSince [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) is permitted by [NIST SP 800-63B-4](https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver) and has FIPS-140 validated implementations, it should be the preferred algorithm when these are required.\n\nThe PBKDF2 algorithm requires that you select an internal hashing algorithm such as an HMAC or a variety of other hashing algorithms. HMAC-SHA-256 is widely supported and is recommended by NIST.\n\nThe work factor for PBKDF2 is implemented through an iteration count, which should be set differently based on the internal hashing algorithm used.\n\n- PBKDF2-HMAC-SHA256: 600,000 iterations (recommended)\n- PBKDF2-HMAC-SHA512: 220,000 iterations\n- PBKDF2-HMAC-SHA1: 1,400,000 iterations — **legacy only**, do not select for new systems.",
+                    "similarity": 0.7396
+                },
+                {
+                    "id": "password_storage-0096",
+                    "title": "Parallel PBKDF2",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Parallel PBKDF2\n- PPBKDF2-SHA512: cost 2\n- PPBKDF2-SHA256: cost 5\n- PPBKDF2-SHA1: cost 10\n\nThese configuration settings are equivalent in the defense they provide. ([Number as of December 2022, based on testing of RTX 4000 GPUs](https://tobtu.com/minimum-password-settings/))",
+                    "similarity": 0.7385
+                }
+            ],
+            "abstention_assessment": "not_applicable"
+        },
+        {
+            "id": "Q3",
+            "question": "Why should every password have a unique salt?",
+            "expected_behavior": "answer",
+            "matched_keywords": [
+                "rainbow tables"
+            ],
+            "expected_keywords": [
+                "unique salt",
+                "rainbow tables"
+            ],
+            "keyword_coverage": 0.5,
+            "top_results": [
+                {
+                    "id": "password_storage-0077",
+                    "title": "Salting",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Salting\nA salt is a unique, randomly generated string that is added to each password as part of the hashing process. As the salt is unique for every user, an attacker has to crack hashes one at a time using the respective salt rather than calculating a hash once and comparing it against every stored hash. This makes cracking large numbers of hashes significantly harder, as the time required grows in direct proportion to the number of hashes.\n\nSalting also protects against an attacker's pre-computing hashes using rainbow tables or database-based lookups. Finally, salting means that it is impossible to determine whether two users have the same password without cracking the hashes, as the different salts will result in different hashes even if the passwords are the same.\n\nAt the algorithm and specification level, modern password hashing functions such as [Argon2id](#argon2id), [bcrypt](#bcrypt), and [PBKDF2](#pbkdf2) require the caller to provide a salt.",
+                    "similarity": 0.7814
+                },
+                {
+                    "id": "password_storage-0079",
+                    "title": "Peppering",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Peppering\n[Peppering](https://datatracker.ietf.org/doc/html/draft-ietf-kitten-password-storage-07#section-4.2) is a class of strategies that can be used in addition to salting to provide an additional layer of protection. It prevents an attacker from being able to crack any of the hashes if they only have access to the database, for example, if they have exploited a SQL injection vulnerability or obtained a backup of the database.",
+                    "similarity": 0.7054
+                },
+                {
+                    "id": "password_storage-0080",
+                    "title": "Common requirements for peppering strategies",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Common requirements for peppering strategies\n- A pepper is **shared between stored passwords**, rather than being *unique* to an individual password like a password salt.\n- Unlike a password salt, the pepper should not be public and **should not be stored along with the generated hash**. The pepper should be stored separately from the password database.\n- Peppers are secrets and should be stored in \"secrets vaults\" or HSMs (Hardware Security Modules). See the [Secrets Management Cheat Sheet](Secrets_Management_Cheat_Sheet.md) for more information on securely storing secrets.\n- In the event of a pepper's compromise, the pepper will have to be changed. Peppers cannot be changed without knowledge of a user's password. Therefore changing a pepper will require forcing all users whose passwords were protected by the previous pepper to reset their passwords.",
+                    "similarity": 0.698
+                },
+                {
+                    "id": "password_storage-0078",
+                    "title": "Salting",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Salting\nlevel, modern password hashing functions such as [Argon2id](#argon2id), [bcrypt](#bcrypt), and [PBKDF2](#pbkdf2) require the caller to provide a salt.\nHowever, most widely used implementations and libraries automatically generate and manage salts internally, so application developers typically do not need to handle salt generation manually when using these libraries correctly.",
+                    "similarity": 0.6939
+                },
+                {
+                    "id": "password_storage-0083",
+                    "title": "Using Work Factors",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Using Work Factors\nThe work factor is the number of iterations of the hashing algorithm that are performed for each password (usually, it's actually `2^work` iterations). The work factor is typically stored in the hash output. It makes calculating the hash more computationally expensive, which in turn reduces the speed and/or increases the cost for which an attacker can attempt to crack the password hash.\n\nWhen you choose a work factor, strike a balance between security and performance. Though higher work factors make hashes more difficult for an attacker to crack, they will slow down the process of verifying a login attempt. If the work factor is too high, the performance of the application may be degraded, which could be used by an attacker to carry out a denial of service attack by exhausting the server's CPU with a large number of login attempts.",
+                    "similarity": 0.6855
+                }
+            ],
+            "abstention_assessment": "not_applicable"
+        },
+        {
+            "id": "Q4",
+            "question": "How can I protect login endpoints against repeated failed attempts?",
+            "expected_behavior": "answer",
+            "matched_keywords": [
+                "login throttling",
+                "account lockout",
+                "CAPTCHA"
+            ],
+            "expected_keywords": [
+                "login throttling",
+                "account lockout",
+                "CAPTCHA"
+            ],
+            "keyword_coverage": 1.0,
+            "top_results": [
+                {
+                    "id": "authentication-0042",
+                    "title": "Account Lockout",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Account Lockout\nThe most common protection against these attacks is to implement account lockout, which prevents any more login attempts for a period after a certain number of failed logins.\n\nThe counter of failed logins should be associated with the account itself, rather than the source IP address, in order to prevent an attacker from making login attempts from a large number of different IP addresses. There are a number of different factors that should be considered when implementing an account lockout policy in order to find a balance between security and usability:\n\n- The number of failed attempts before the account is locked out (lockout threshold).\n- The time period that these attempts must occur within (observation window).\n- How long the account is locked out for (lockout duration).",
+                    "similarity": 0.7614
+                },
+                {
+                    "id": "authentication-0038",
+                    "title": "Protect Against Automated Attacks",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Protect Against Automated Attacks\nThere are a number of different types of automated attacks that attackers can use to try and compromise user accounts. The most common types are listed below:\n\n| Attack Type         | Description                                                                                      |\n|---------------------|--------------------------------------------------------------------------------------------------|\n| Brute Force         | Testing multiple passwords from a dictionary or other source against a single account.           |\n| Credential Stuffing | Testing username/password pairs obtained from the breach of another site.                        |\n| Password Spraying   | Testing a single weak password against a large number of different accounts.                     |",
+                    "similarity": 0.7492
+                },
+                {
+                    "id": "authentication-0041",
+                    "title": "Login Throttling",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Login Throttling\nLogin Throttling is a security mechanism used to prevent an attacker from making too many attempts at guessing a password through normal interactive means, it includes the following controls:\n\n- Maximum number of attempts.",
+                    "similarity": 0.7344
+                },
+                {
+                    "id": "authentication-0044",
+                    "title": "CAPTCHA",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "CAPTCHA\nThe use of an effective CAPTCHA can help to prevent automated login attempts against accounts. However, many CAPTCHA implementations have weaknesses that allow them to be solved using automated techniques or can be outsourced to services that can solve them. As such, the use of CAPTCHA should be viewed as a defense-in-depth control to make brute-force attacks more time-consuming and expensive, rather than as a preventative.\n\nIt may be more user-friendly to only require a CAPTCHA be solved after a small number of failed login attempts, rather than requiring it from the very first login.",
+                    "similarity": 0.7267
+                },
+                {
+                    "id": "authentication-0043",
+                    "title": "Account Lockout",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Account Lockout\nhreshold).\n- The time period that these attempts must occur within (observation window).\n- How long the account is locked out for (lockout duration).\n\nRather than implementing a fixed lockout duration (e.g., ten minutes), some applications use an exponential lockout, where the lockout duration starts as a very short period (e.g., one second), but doubles after each failed login attempt.\n\n- Amount of time to delay after each account lockout (max 2-3, after that permanent account lockout).\n\nWhen designing an account lockout system, care must be taken to prevent it from being used to cause a denial of service by locking out other users' accounts. One way this could be performed is to allow the use of the forgotten password functionality to log in, even if the account is locked out.",
+                    "similarity": 0.7164
+                }
+            ],
+            "abstention_assessment": "not_applicable"
+        },
+        {
+            "id": "Q5",
+            "question": "How can I prevent SQL injection when accepting user input?",
+            "expected_behavior": "answer",
+            "matched_keywords": [
+                "parameterized queries",
+                "input validation"
+            ],
+            "expected_keywords": [
+                "parameterized queries",
+                "input validation"
+            ],
+            "keyword_coverage": 1.0,
+            "top_results": [
+                {
+                    "id": "sql_injection-0110",
+                    "title": "Primary Defenses",
+                    "source": "sql_injection.md",
+                    "page": null,
+                    "text": "Primary Defenses\nThe preferred patterns are:\n\n- **parameterized queries** when including dynamic data in SQL requests;\n- for structural parts that cannot be parameterized (table names, column names, sort direction), map user choices to a **strict allow-list** of fixed, application-owned values.\n\nRelying on manually escaping dynamic inputs is error-prone and is strongly discouraged.",
+                    "similarity": 0.7715
+                },
+                {
+                    "id": "sql_injection-0113",
+                    "title": "Manually escaping (STRONGLY DISCOURAGED)",
+                    "source": "sql_injection.md",
+                    "page": null,
+                    "text": "Manually escaping (STRONGLY DISCOURAGED)\n**Do not manually escape untrusted values to construct SQL queries. Use parameterized queries instead.**\n\nManually escaping the values into the SQL string is error-prone and attempts to do something which is normally handled by the database driver through parameter bindings. It can fail and can allow SQL injections for several reasons:\n\n- SQL escaping rules are not always straightforward;\n- different SQL dialects have different rules;\n- some databases have configuration which might affect the escaping behavior (such as MySQL [NO_BACKSLASH_ESCAPES](https://dev.mysql.com/doc/refman/9.7/en/sql-mode.html#sqlmode_no_backslash_escapes)).\n\nReplace escaping-based query construction with parameter binding.",
+                    "similarity": 0.7537
+                },
+                {
+                    "id": "sql_injection-0111",
+                    "title": "Parameterized Queries",
+                    "source": "sql_injection.md",
+                    "page": null,
+                    "text": "Parameterized Queries\nDefine the SQL structure separately from its data values and bind those values through the database API, as shown in the [Basic SQL injection](#basic-sql-injection) example. Concatenating untrusted values into the query before preparing it defeats this protection.\n\nSee the [Query Parameterization Cheat Sheet](Query_Parameterization_Cheat_Sheet.md) for additional examples of parameterized queries in several languages, including Java, .NET, Ruby, PHP, Cold Fusion, Perl, and Rust. Other examples can be found at [Bobby Tables](https://bobby-tables.com/).",
+                    "similarity": 0.753
+                },
+                {
+                    "id": "sql_injection-0120",
+                    "title": "Input Validation",
+                    "source": "sql_injection.md",
+                    "page": null,
+                    "text": "Input Validation\nInput validation complements parameter binding; it does not replace it. Continue binding all data values, even when they pass type, length, or format checks. Validation of a value does not make it safe to concatenate into SQL, and a validation approach that is safe for one SQL dialect may be unsafe for another. See the [Input Validation Cheat Sheet](Input_Validation_Cheat_Sheet.md).",
+                    "similarity": 0.752
+                },
+                {
+                    "id": "sql_injection-0103",
+                    "title": "Introduction",
+                    "source": "sql_injection.md",
+                    "page": null,
+                    "text": "Introduction\nA SQL injection attack occurs when untrusted data (usually strings) becomes part of a query's SQL syntax, modifying the logic of the SQL request.\n\nThe malicious data can come from various sources such as:\n\n- an HTTP request (for example, from a malicious user);\n- an LDAP directory;\n- an incoming email;\n- a third party REST API service;\n- the database itself.\n\n**Impact:** A successful SQL injection attack can, depending on database features and privileges, read data from the database, modify database data (insert/update/delete), execute administration operations on the database (such as shutdown the DBMS), recover the content of a given file existing on the DBMS file system or write files into the file system, and, in some cases, execute operating system commands.\n\n**Resolution:** define the SQL structure separately from its data values, then bind those values through the database API:\n\n- use parameterized queries for dynamic data values;",
+                    "similarity": 0.7347
+                }
+            ],
+            "abstention_assessment": "not_applicable"
+        },
+        {
+            "id": "Q6",
+            "question": "How can I configure AWS CloudTrail to detect suspicious API activity?",
+            "expected_behavior": "abstain",
+            "matched_keywords": [],
+            "expected_keywords": [],
+            "keyword_coverage": null,
+            "top_results": [
+                {
+                    "id": "authentication-0046",
+                    "title": "Logging and Monitoring",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Logging and Monitoring\nEnable logging and monitoring of authentication functions to detect attacks/failures on a real-time basis\n\n- Ensure that all failures are logged and reviewed\n- Ensure that all password failures are logged and reviewed\n- Ensure that all account lockouts are logged and reviewed",
+                    "similarity": 0.645
+                },
+                {
+                    "id": "authentication-0038",
+                    "title": "Protect Against Automated Attacks",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Protect Against Automated Attacks\nThere are a number of different types of automated attacks that attackers can use to try and compromise user accounts. The most common types are listed below:\n\n| Attack Type         | Description                                                                                      |\n|---------------------|--------------------------------------------------------------------------------------------------|\n| Brute Force         | Testing multiple passwords from a dictionary or other source against a single account.           |\n| Credential Stuffing | Testing username/password pairs obtained from the breach of another site.                        |\n| Password Spraying   | Testing a single weak password against a large number of different accounts.                     |",
+                    "similarity": 0.6411
+                },
+                {
+                    "id": "authentication-0024",
+                    "title": "Consider Strong Transaction Authentication",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Consider Strong Transaction Authentication\nSome applications should use a second factor to check whether a user may perform sensitive operations. For more information, see the [Transaction Authorization Cheat Sheet](Transaction_Authorization_Cheat_Sheet.md).",
+                    "similarity": 0.6306
+                },
+                {
+                    "id": "authentication-0020",
+                    "title": "Re-authentication After Risk Events",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Re-authentication After Risk Events\n**Overview:**\nRe-authentication is critical when an account has experienced high-risk activity such as account recovery, password resets, or suspicious behavior patterns. This section outlines when and how to trigger re-authentication to protect users and prevent unauthorized access. For further details, see the [Require Re-authentication for Sensitive Features](#require-re-authentication-for-sensitive-features) section.",
+                    "similarity": 0.6296
+                },
+                {
+                    "id": "authentication-0022",
+                    "title": "Re-authentication Mechanisms",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Re-authentication Mechanisms\n- **Adaptive Authentication**\n  Use risk-based authentication models that adapt to the user's behavior and context\n- **Multi-Factor Authentication (MFA)**\n  Require an additional layer of verification for sensitive actions or events\n- **Bound Authenticators**\n  Require an authenticator already bound to the account, such as the current password or a passkey. Do not substitute security questions, which are excluded by [ASVS 6.4.2](https://github.com/OWASP/ASVS/blob/master/5.0/en/0x15-V6-Authentication.md#v64-authentication-factor-lifecycle-and-recovery).",
+                    "similarity": 0.6247
+                }
+            ],
+            "abstention_assessment": "manual_review_required"
+        },
+        {
+            "id": "Q7",
+            "question": "Why is multifactor authentication important?",
+            "expected_behavior": "answer",
+            "matched_keywords": [
+                "multifactor authentication"
+            ],
+            "expected_keywords": [
+                "multifactor authentication",
+                "additional authentication"
+            ],
+            "keyword_coverage": 0.5,
+            "top_results": [
+                {
+                    "id": "authentication-0040",
+                    "title": "Multi-Factor Authentication",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Multi-Factor Authentication\nMulti-factor authentication (MFA) is by far the best defense against the majority of password-related attacks, including brute-force attacks, with analysis by Microsoft suggesting that it would have stopped [99.9% of account compromises](https://techcommunity.microsoft.com/t5/Azure-Active-Directory-Identity/Your-Pa-word-doesn-t-matter/ba-p/731984). As such, it should be implemented wherever possible; however, depending on the audience of the application, it may not be practical or feasible to enforce the use of MFA.\n\nThe [Multifactor Authentication Cheat Sheet](Multifactor_Authentication_Cheat_Sheet.md) contains further guidance on implementing MFA.",
+                    "similarity": 0.6992
+                },
+                {
+                    "id": "authentication-0066",
+                    "title": "Adaptive or Risk Based Authentication",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Adaptive or Risk Based Authentication\nA feature of more advanced applications is the ability to require different authentication stages depending on various environmental and contextual attributes (including but not limited to, the sensitivity of the data for which access is being requested, time of day, user location, IP address, or device fingerprint).\n\nFor example, an application may require MFA for the first login from a particular device but not for subsequent logins from that device. Alternatively, a single sign-on solution may authenticate the user and allow them to remain logged in for a day but require a reauthentication if they try to access their profile page.",
+                    "similarity": 0.6919
+                },
+                {
+                    "id": "authentication-0047",
+                    "title": "Use of authentication protocols that require no password",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Use of authentication protocols that require no password\nWhile authentication through a combination of username, password, and multi-factor authentication is considered generally secure, there are use cases where it isn't considered the best option or even safe. Examples of this are third-party applications that desire to connect to the web application, either from a mobile device, another website, desktop, or other situations. When this happens, it is NOT considered safe to allow the third-party application to store the user/password combo, since then it extends the attack surface into their hands, where it isn't in your control. For this and other use cases, there are several authentication protocols that can protect you from exposing your users' data to attackers.",
+                    "similarity": 0.6782
+                },
+                {
+                    "id": "authentication-0021",
+                    "title": "When to Trigger Re-authentication",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "When to Trigger Re-authentication\n- **Suspicious Account Activity**\n  When unusual login patterns, IP address changes, or device enrollments occur\n- **Account Recovery**\n  After users reset their passwords or change sensitive account details\n- **Critical Actions**\n  For high-risk actions like changing payment details or adding new trusted devices",
+                    "similarity": 0.6735
+                },
+                {
+                    "id": "authentication-0038",
+                    "title": "Protect Against Automated Attacks",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Protect Against Automated Attacks\nThere are a number of different types of automated attacks that attackers can use to try and compromise user accounts. The most common types are listed below:\n\n| Attack Type         | Description                                                                                      |\n|---------------------|--------------------------------------------------------------------------------------------------|\n| Brute Force         | Testing multiple passwords from a dictionary or other source against a single account.           |\n| Credential Stuffing | Testing username/password pairs obtained from the breach of another site.                        |\n| Password Spraying   | Testing a single weak password against a large number of different accounts.                     |",
+                    "similarity": 0.6735
+                }
+            ],
+            "abstention_assessment": "not_applicable"
+        },
+        {
+            "id": "Q8",
+            "question": "What authentication protections should a login system include?",
+            "expected_behavior": "answer",
+            "matched_keywords": [],
+            "expected_keywords": [
+                "password strength",
+                "login throttling",
+                "multifactor"
+            ],
+            "keyword_coverage": 0.0,
+            "top_results": [
+                {
+                    "id": "authentication-0046",
+                    "title": "Logging and Monitoring",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Logging and Monitoring\nEnable logging and monitoring of authentication functions to detect attacks/failures on a real-time basis\n\n- Ensure that all failures are logged and reviewed\n- Ensure that all password failures are logged and reviewed\n- Ensure that all account lockouts are logged and reviewed",
+                    "similarity": 0.7574
+                },
+                {
+                    "id": "authentication-0044",
+                    "title": "CAPTCHA",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "CAPTCHA\nThe use of an effective CAPTCHA can help to prevent automated login attempts against accounts. However, many CAPTCHA implementations have weaknesses that allow them to be solved using automated techniques or can be outsourced to services that can solve them. As such, the use of CAPTCHA should be viewed as a defense-in-depth control to make brute-force attacks more time-consuming and expensive, rather than as a preventative.\n\nIt may be more user-friendly to only require a CAPTCHA be solved after a small number of failed login attempts, rather than requiring it from the very first login.",
+                    "similarity": 0.7494
+                },
+                {
+                    "id": "authentication-0038",
+                    "title": "Protect Against Automated Attacks",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Protect Against Automated Attacks\nThere are a number of different types of automated attacks that attackers can use to try and compromise user accounts. The most common types are listed below:\n\n| Attack Type         | Description                                                                                      |\n|---------------------|--------------------------------------------------------------------------------------------------|\n| Brute Force         | Testing multiple passwords from a dictionary or other source against a single account.           |\n| Credential Stuffing | Testing username/password pairs obtained from the breach of another site.                        |\n| Password Spraying   | Testing a single weak password against a large number of different accounts.                     |",
+                    "similarity": 0.7472
+                },
+                {
+                    "id": "authentication-0047",
+                    "title": "Use of authentication protocols that require no password",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Use of authentication protocols that require no password\nWhile authentication through a combination of username, password, and multi-factor authentication is considered generally secure, there are use cases where it isn't considered the best option or even safe. Examples of this are third-party applications that desire to connect to the web application, either from a mobile device, another website, desktop, or other situations. When this happens, it is NOT considered safe to allow the third-party application to store the user/password combo, since then it extends the attack surface into their hands, where it isn't in your control. For this and other use cases, there are several authentication protocols that can protect you from exposing your users' data to attackers.",
+                    "similarity": 0.7413
+                },
+                {
+                    "id": "authentication-0042",
+                    "title": "Account Lockout",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Account Lockout\nThe most common protection against these attacks is to implement account lockout, which prevents any more login attempts for a period after a certain number of failed logins.\n\nThe counter of failed logins should be associated with the account itself, rather than the source IP address, in order to prevent an attacker from making login attempts from a large number of different IP addresses. There are a number of different factors that should be considered when implementing an account lockout policy in order to find a balance between security and usability:\n\n- The number of failed attempts before the account is locked out (lockout threshold).\n- The time period that these attempts must occur within (observation window).\n- How long the account is locked out for (lockout duration).",
+                    "similarity": 0.7404
+                }
+            ],
+            "abstention_assessment": "not_applicable"
+        },
+        {
+            "id": "Q9",
+            "question": "What are the risks of storing passwords using weak hashing methods?",
+            "expected_behavior": "answer",
+            "matched_keywords": [
+                "brute force",
+                "password hashes"
+            ],
+            "expected_keywords": [
+                "fast hashing",
+                "brute force",
+                "password hashes"
+            ],
+            "keyword_coverage": 0.6667,
+            "top_results": [
+                {
+                    "id": "password_storage-0075",
+                    "title": "When Password Hashes Can Be Cracked",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "When Password Hashes Can Be Cracked\n**Strong passwords stored with modern hashing algorithms and using hashing best practices should be effectively impossible for an attacker to crack.** It is your responsibility as an application owner to select a modern hashing algorithm.\n\nHowever, there are some situations where an attacker can \"crack\" the hashes in some circumstances by doing the following:\n\n- Selecting a password you think the victim has chosen (e.g.`password1!`)\n- Calculating the hash\n- Comparing the hash you calculated to the hash of the victim. If they match, you have correctly \"cracked\" the hash and now know the plaintext value of their password.\n\nUsually, the attacker will repeat this process with a list of large number of potential candidate passwords, such as:\n\n- Lists of passwords obtained from other compromised sites\n- Brute force (trying every possible candidate)\n- Dictionaries or wordlists of common passwords",
+                    "similarity": 0.7554
+                },
+                {
+                    "id": "password_storage-0076",
+                    "title": "When Password Hashes Can Be Cracked",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "When Password Hashes Can Be Cracked\nts of passwords obtained from other compromised sites\n- Brute force (trying every possible candidate)\n- Dictionaries or wordlists of common passwords\n\nWhile the number of permutations can be enormous, with high speed hardware (such as GPUs) and cloud services with many servers for rent, the cost to an attacker is relatively small to do successful password cracking, especially when best practices for hashing are not followed.",
+                    "similarity": 0.7452
+                },
+                {
+                    "id": "password_storage-0100",
+                    "title": "Upgrading Legacy Hashes",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Upgrading Legacy Hashes\nwever, it can make the hashes easier to crack. These hashes should be replaced with direct hashes of the users' passwords next time the user logs in.\n\nRemember that once your password hashing method is selected, it will have to be upgraded in the future, so ensure that upgrading your hashing algorithm is as easy as possible. During the transition period, allow for a mix of old and new hashing algorithms. Using a mix of hashing algorithms is easier if the password hashing algorithm and work factor are stored with the password using a standard format, for example, the [modular PHC string format](https://github.com/P-H-C/phc-string-format/blob/master/phc-sf-spec.md).",
+                    "similarity": 0.7448
+                },
+                {
+                    "id": "password_storage-0099",
+                    "title": "Upgrading Legacy Hashes",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Upgrading Legacy Hashes\nat old (less secure) password hashes will be stored in the database until the user logs in. You can take one of two approaches to avoid this dilemma.\n\nUpgrade Method One: Expire and delete the password hashes of users who have been inactive for an extended period and require them to reset their passwords to login again. Although secure, this approach is not particularly user-friendly. Expiring the passwords of many users may cause issues for support staff or may be interpreted by users as an indication of a breach.\n\nUpgrade Method Two: Use the existing password hashes as inputs for a more secure algorithm. For example, if the application originally stored passwords as `md5($password)`, this could be easily upgraded to `bcrypt(md5($password))`. Layering the hashes avoids the need to know the original password; however, it can make the hashes easier to crack. These hashes should be replaced with direct hashes of the users' passwords next time the user logs in.",
+                    "similarity": 0.7416
+                },
+                {
+                    "id": "password_storage-0086",
+                    "title": "Password Hashing Algorithms",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Password Hashing Algorithms\nSome modern hashing algorithms have been specifically designed to securely store passwords. This means that they should be slow (unlike algorithms such as MD5 and SHA-1, which were designed to be fast), and you can change how slow they are by changing the work factor.\n\nYou do not need to hide which password hashing algorithm is used by an application. If you utilize a modern password hashing algorithm with proper configuration parameters, it should be safe to state in public which password hashing algorithms are in use and be listed [here](https://pulse.michalspacek.cz/passwords/storages).\n\nWhen selecting a password hashing algorithm, developers should prefer modern algorithms that are designed to resist both GPU-based and memory-based attacks.\nWhere available, newer algorithms should be chosen for new applications, while older algorithms may still be acceptable for legacy systems with appropriate configuration.\n\nThree hashing algorithms that should be considered.",
+                    "similarity": 0.7389
+                }
+            ],
+            "abstention_assessment": "not_applicable"
+        },
+        {
+            "id": "Q10",
+            "question": "Which OWASP Top 10 categories are covered by the current OWASPShield records?",
+            "expected_behavior": "answer",
+            "matched_keywords": [
+                "authentication",
+                "password storage"
+            ],
+            "expected_keywords": [
+                "authentication",
+                "password storage",
+                "SQL injection"
+            ],
+            "keyword_coverage": 0.6667,
+            "top_results": [
+                {
+                    "id": "authentication-0029",
+                    "title": "Authentication Responses",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Authentication Responses\nUsing any of the authentication mechanisms (login, password reset, or password recovery), an application must respond with a generic error message regardless of whether:\n\n- The user ID or password was incorrect.\n- The account does not exist.\n- The account is locked or disabled.\n\nThe account registration feature should also be taken into consideration, and the same approach of a generic error message can be applied regarding the case in which the user exists.\n\nThe objective is to prevent the creation of a [discrepancy factor](https://cwe.mitre.org/data/definitions/204.html), allowing an attacker to mount a user enumeration action against the application.",
+                    "similarity": 0.656
+                },
+                {
+                    "id": "authentication-0028",
+                    "title": "Authentication and Error Messages",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Authentication and Error Messages\nIncorrectly implemented error messages in the case of authentication functionality can be used for the purposes of user ID and password enumeration. An application should respond (both HTTP and HTML) in a generic manner.",
+                    "similarity": 0.6534
+                },
+                {
+                    "id": "authentication-0015",
+                    "title": "Store Passwords in a Secure Fashion",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Store Passwords in a Secure Fashion\nIt is critical for an application to store a password using the right cryptographic technique. Please see [Password Storage Cheat Sheet](Password_Storage_Cheat_Sheet.md) for details on this feature.",
+                    "similarity": 0.652
+                },
+                {
+                    "id": "authentication-0038",
+                    "title": "Protect Against Automated Attacks",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Protect Against Automated Attacks\nThere are a number of different types of automated attacks that attackers can use to try and compromise user accounts. The most common types are listed below:\n\n| Attack Type         | Description                                                                                      |\n|---------------------|--------------------------------------------------------------------------------------------------|\n| Brute Force         | Testing multiple passwords from a dictionary or other source against a single account.           |\n| Credential Stuffing | Testing username/password pairs obtained from the breach of another site.                        |\n| Password Spraying   | Testing a single weak password against a large number of different accounts.                     |",
+                    "similarity": 0.6491
+                },
+                {
+                    "id": "authentication-0047",
+                    "title": "Use of authentication protocols that require no password",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Use of authentication protocols that require no password\nWhile authentication through a combination of username, password, and multi-factor authentication is considered generally secure, there are use cases where it isn't considered the best option or even safe. Examples of this are third-party applications that desire to connect to the web application, either from a mobile device, another website, desktop, or other situations. When this happens, it is NOT considered safe to allow the third-party application to store the user/password combo, since then it extends the attack surface into their hands, where it isn't in your control. For this and other use cases, there are several authentication protocols that can protect you from exposing your users' data to attackers.",
+                    "similarity": 0.6479
+                }
+            ],
+            "abstention_assessment": "not_applicable"
+        },
+        {
+            "id": "Q11",
+            "question": "How should an application securely handle password recovery?",
+            "expected_behavior": "answer",
+            "matched_keywords": [
+                "password recovery",
+                "secure",
+                "authentication"
+            ],
+            "expected_keywords": [
+                "password recovery",
+                "secure",
+                "authentication"
+            ],
+            "keyword_coverage": 1.0,
+            "top_results": [
+                {
+                    "id": "authentication-0014",
+                    "title": "Implement Secure Password Recovery Mechanism",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Implement Secure Password Recovery Mechanism\nIt is common for an application to have a mechanism that provides a means for a user to gain access to their account in the event they forget their password. Please see [Forgot Password Cheat Sheet](Forgot_Password_Cheat_Sheet.md) for details on this feature.",
+                    "similarity": 0.7668
+                },
+                {
+                    "id": "authentication-0017",
+                    "title": "Change Password Feature",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Change Password Feature\nWhen developing a change password feature, ensure to have:\n\n- The user is authenticated with an active session.\n- Current password verification. This is to ensure that it's the legitimate user who is changing the password. Consider this abuse case: a user logs in on a public computer and forgets to log out. Another person could then use that active session. If we don't verify the current password, this other person may be able to change the password.",
+                    "similarity": 0.7255
+                },
+                {
+                    "id": "authentication-0045",
+                    "title": "Security Questions and Memorable Words",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Security Questions and Memorable Words\nDo not use security questions for authentication or re-authentication; [ASVS 6.4.2](https://github.com/OWASP/ASVS/blob/master/5.0/en/0x15-V6-Authentication.md#v64-authentication-factor-lifecycle-and-recovery) excludes knowledge-based authentication. When verifying a password or memorable word, request and verify the full secret rather than selected characters, as required by [NIST SP 800-63B-4](https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver). See the [Choosing and Using Security Questions Cheat Sheet](Choosing_and_Using_Security_Questions_Cheat_Sheet.md) for guidance limited to legacy systems.",
+                    "similarity": 0.7183
+                },
+                {
+                    "id": "authentication-0015",
+                    "title": "Store Passwords in a Secure Fashion",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Store Passwords in a Secure Fashion\nIt is critical for an application to store a password using the right cryptographic technique. Please see [Password Storage Cheat Sheet](Password_Storage_Cheat_Sheet.md) for details on this feature.",
+                    "similarity": 0.718
+                },
+                {
+                    "id": "authentication-0029",
+                    "title": "Authentication Responses",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Authentication Responses\nUsing any of the authentication mechanisms (login, password reset, or password recovery), an application must respond with a generic error message regardless of whether:\n\n- The user ID or password was incorrect.\n- The account does not exist.\n- The account is locked or disabled.\n\nThe account registration feature should also be taken into consideration, and the same approach of a generic error message can be applied regarding the case in which the user exists.\n\nThe objective is to prevent the creation of a [discrepancy factor](https://cwe.mitre.org/data/definitions/204.html), allowing an attacker to mount a user enumeration action against the application.",
+                    "similarity": 0.7163
+                }
+            ],
+            "abstention_assessment": "not_applicable"
+        },
+        {
+            "id": "Q12",
+            "question": "Why should passwords only be transmitted over TLS?",
+            "expected_behavior": "answer",
+            "matched_keywords": [
+                "TLS",
+                "transport",
+                "passwords"
+            ],
+            "expected_keywords": [
+                "TLS",
+                "transport",
+                "passwords"
+            ],
+            "keyword_coverage": 1.0,
+            "top_results": [
+                {
+                    "id": "authentication-0018",
+                    "title": "Transmit Passwords Only Over TLS or Other Strong Transport",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Transmit Passwords Only Over TLS or Other Strong Transport\nSee: [Transport Layer Security Cheat Sheet](Transport_Layer_Security_Cheat_Sheet.md)\n\nThe login page and all subsequent authenticated pages must be exclusively accessed over TLS or other strong transport. Failure to utilize TLS or other strong transport for the login page allows an attacker to modify the login form action, causing the user's credentials to be posted to an arbitrary location. Failure to utilize TLS or other strong transport for authenticated pages after login enables an attacker to view the unencrypted session ID and compromise the user's authenticated session.",
+                    "similarity": 0.7615
+                },
+                {
+                    "id": "authentication-0027",
+                    "title": "TLS Client Authentication",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "TLS Client Authentication\nan average keylogger from stealing it), it is still considered a good idea to consider using both a password and TLS client authentication combined.\n\nAdditionally, if the client is behind an enterprise proxy that performs SSL/TLS decryption, this will break certificate authentication unless the site is allowed on the proxy.\n\nFor more information, see: [Client-authenticated TLS handshake](https://en.wikipedia.org/wiki/Transport_Layer_Security#Client-authenticated_TLS_handshake)",
+                    "similarity": 0.7226
+                },
+                {
+                    "id": "authentication-0026",
+                    "title": "TLS Client Authentication",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "TLS Client Authentication\nhis approach is appropriate when:\n\n- It is acceptable (or even preferred) that the user has access to the website only from a single computer/browser.\n- The user is not easily scared by the process of installing TLS certificates on their browser, or there will be someone, probably from IT support, who will do this for the user.\n- The website requires an extra step of security.\n- It is also a good thing to use when the website is for an intranet of a company or organization.\n\nIt is generally not a good idea to use this method for widely and publicly available websites that will have an average user. For example, it wouldn't be a good idea to implement this for a website like Facebook. While this technique can prevent the user from having to type a password (thus protecting against an average keylogger from stealing it), it is still considered a good idea to consider using both a password and TLS client authentication combined.",
+                    "similarity": 0.7165
+                },
+                {
+                    "id": "authentication-0025",
+                    "title": "TLS Client Authentication",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "TLS Client Authentication\nTLS Client Authentication, also known as two-way TLS authentication, consists of both browser and server sending their respective TLS certificates during the TLS handshake process. Just as you can validate the authenticity of a server by using the certificate and asking a verifiably-valid Certificate Authority (CA) if the certificate is valid, the server can authenticate the user by receiving a certificate from the client and validating against a third-party CA or its own CA. To do this, the server must provide the user with a certificate generated specifically for him, assigning values to the subject so that these can be used to determine what user the certificate should validate. The user installs the certificate on a browser and now uses it for the website.\n\nThis approach is appropriate when:\n\n- It is acceptable (or even preferred) that the user has access to the website only from a single computer/browser.",
+                    "similarity": 0.6892
+                },
+                {
+                    "id": "authentication-0047",
+                    "title": "Use of authentication protocols that require no password",
+                    "source": "authentication.md",
+                    "page": null,
+                    "text": "Use of authentication protocols that require no password\nWhile authentication through a combination of username, password, and multi-factor authentication is considered generally secure, there are use cases where it isn't considered the best option or even safe. Examples of this are third-party applications that desire to connect to the web application, either from a mobile device, another website, desktop, or other situations. When this happens, it is NOT considered safe to allow the third-party application to store the user/password combo, since then it extends the attack surface into their hands, where it isn't in your control. For this and other use cases, there are several authentication protocols that can protect you from exposing your users' data to attackers.",
+                    "similarity": 0.6821
+                }
+            ],
+            "abstention_assessment": "not_applicable"
+        },
+        {
+            "id": "Q13",
+            "question": "What is peppering in password storage?",
+            "expected_behavior": "answer",
+            "matched_keywords": [
+                "pepper",
+                "secret",
+                "password hashing"
+            ],
+            "expected_keywords": [
+                "pepper",
+                "secret",
+                "password hashing"
+            ],
+            "keyword_coverage": 1.0,
+            "top_results": [
+                {
+                    "id": "password_storage-0080",
+                    "title": "Common requirements for peppering strategies",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Common requirements for peppering strategies\n- A pepper is **shared between stored passwords**, rather than being *unique* to an individual password like a password salt.\n- Unlike a password salt, the pepper should not be public and **should not be stored along with the generated hash**. The pepper should be stored separately from the password database.\n- Peppers are secrets and should be stored in \"secrets vaults\" or HSMs (Hardware Security Modules). See the [Secrets Management Cheat Sheet](Secrets_Management_Cheat_Sheet.md) for more information on securely storing secrets.\n- In the event of a pepper's compromise, the pepper will have to be changed. Peppers cannot be changed without knowledge of a user's password. Therefore changing a pepper will require forcing all users whose passwords were protected by the previous pepper to reset their passwords.",
+                    "similarity": 0.8142
+                },
+                {
+                    "id": "password_storage-0081",
+                    "title": "Pre-hashing peppers",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Pre-hashing peppers\nIn this strategy, a pepper is added to a password before being hashed by a password hashing algorithm. The computed hash is then stored in the database. In this case the pepper should be a random value generated securely. See the [Cryptographic_Storage_Cheat_Sheet](Cryptographic_Storage_Cheat_Sheet.md#secure-random-number-generation) for more information on securely generating random values.",
+                    "similarity": 0.8117
+                },
+                {
+                    "id": "password_storage-0079",
+                    "title": "Peppering",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Peppering\n[Peppering](https://datatracker.ietf.org/doc/html/draft-ietf-kitten-password-storage-07#section-4.2) is a class of strategies that can be used in addition to salting to provide an additional layer of protection. It prevents an attacker from being able to crack any of the hashes if they only have access to the database, for example, if they have exploited a SQL injection vulnerability or obtained a backup of the database.",
+                    "similarity": 0.8073
+                },
+                {
+                    "id": "password_storage-0082",
+                    "title": "Post-hashing peppers",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Post-hashing peppers\nIn this strategy, a password is hashed as usual using a password hashing algorithm. The resulting password hash is then hashed again using an HMAC (e.g., HMAC-SHA256, HMAC-SHA512, depending on the desired output length) before storing the resulting hash in the database. In this case the pepper is acting as the HMAC key and should be generated as per requirements of the HMAC algorithm.",
+                    "similarity": 0.8025
+                },
+                {
+                    "id": "password_storage-0077",
+                    "title": "Salting",
+                    "source": "password_storage.md",
+                    "page": null,
+                    "text": "Salting\nA salt is a unique, randomly generated string that is added to each password as part of the hashing process. As the salt is unique for every user, an attacker has to crack hashes one at a time using the respective salt rather than calculating a hash once and comparing it against every stored hash. This makes cracking large numbers of hashes significantly harder, as the time required grows in direct proportion to the number of hashes.\n\nSalting also protects against an attacker's pre-computing hashes using rainbow tables or database-based lookups. Finally, salting means that it is impossible to determine whether two users have the same password without cracking the hashes, as the different salts will result in different hashes even if the passwords are the same.\n\nAt the algorithm and specification level, modern password hashing functions such as [Argon2id](#argon2id), [bcrypt](#bcrypt), and [PBKDF2](#pbkdf2) require the caller to provide a salt.",
+                    "similarity": 0.7266
+                }
+            ],
+            "abstention_assessment": "not_applicable"
+        },
+        {
+            "id": "Q14",
+            "question": "Why are parameterized queries important for database security?",
+            "expected_behavior": "answer",
+            "matched_keywords": [
+                "parameterized queries",
+                "SQL injection"
+            ],
+            "expected_keywords": [
+                "parameterized queries",
+                "SQL injection"
+            ],
+            "keyword_coverage": 1.0,
+            "top_results": [
+                {
+                    "id": "sql_injection-0111",
+                    "title": "Parameterized Queries",
+                    "source": "sql_injection.md",
+                    "page": null,
+                    "text": "Parameterized Queries\nDefine the SQL structure separately from its data values and bind those values through the database API, as shown in the [Basic SQL injection](#basic-sql-injection) example. Concatenating untrusted values into the query before preparing it defeats this protection.\n\nSee the [Query Parameterization Cheat Sheet](Query_Parameterization_Cheat_Sheet.md) for additional examples of parameterized queries in several languages, including Java, .NET, Ruby, PHP, Cold Fusion, Perl, and Rust. Other examples can be found at [Bobby Tables](https://bobby-tables.com/).",
+                    "similarity": 0.7674
+                },
+                {
+                    "id": "sql_injection-0122",
+                    "title": "References",
+                    "source": "sql_injection.md",
+                    "page": null,
+                    "text": "References\n- [Oracle JDBC: Using Prepared Statements](https://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html)\n- [PostgreSQL: Executing Dynamic Commands](https://www.postgresql.org/docs/current/plpgsql-statements.html#PLPGSQL-STATEMENTS-EXECUTING-DYN)\n- [PHP PDO: Parameter-Marker Limitations](https://www.php.net/manual/en/pdo.prepare.php)",
+                    "similarity": 0.7513
+                },
+                {
+                    "id": "sql_injection-0110",
+                    "title": "Primary Defenses",
+                    "source": "sql_injection.md",
+                    "page": null,
+                    "text": "Primary Defenses\nThe preferred patterns are:\n\n- **parameterized queries** when including dynamic data in SQL requests;\n- for structural parts that cannot be parameterized (table names, column names, sort direction), map user choices to a **strict allow-list** of fixed, application-owned values.\n\nRelying on manually escaping dynamic inputs is error-prone and is strongly discouraged.",
+                    "similarity": 0.7483
+                },
+                {
+                    "id": "sql_injection-0103",
+                    "title": "Introduction",
+                    "source": "sql_injection.md",
+                    "page": null,
+                    "text": "Introduction\nA SQL injection attack occurs when untrusted data (usually strings) becomes part of a query's SQL syntax, modifying the logic of the SQL request.\n\nThe malicious data can come from various sources such as:\n\n- an HTTP request (for example, from a malicious user);\n- an LDAP directory;\n- an incoming email;\n- a third party REST API service;\n- the database itself.\n\n**Impact:** A successful SQL injection attack can, depending on database features and privileges, read data from the database, modify database data (insert/update/delete), execute administration operations on the database (such as shutdown the DBMS), recover the content of a given file existing on the DBMS file system or write files into the file system, and, in some cases, execute operating system commands.\n\n**Resolution:** define the SQL structure separately from its data values, then bind those values through the database API:\n\n- use parameterized queries for dynamic data values;",
+                    "similarity": 0.7442
+                },
+                {
+                    "id": "sql_injection-0105",
+                    "title": "Basic SQL injection",
+                    "source": "sql_injection.md",
+                    "page": null,
+                    "text": "Basic SQL injection\nA simple SQL injection flaw in Java is shown below. The \"customerName\" parameter is simply concatenated to build the query and an attacker can enter SQL code into that query and the application would take the attacker's code and execute it on the database.\n\n```java\n// UNSAFE!\nString query = \"SELECT account_balance FROM user_data WHERE user_name = '\"\n    + request.getParameter(\"customerName\") + \"'\";\nStatement statement = connection.createStatement();\nResultSet results = statement.executeQuery(query);\n```\n\nAs explained below, the recommended safe implementation would use parameterized queries, using `?` as placeholders for the values:\n\n```java\nString query = \"SELECT account_balance FROM user_data WHERE user_name = ?\";\nPreparedStatement statement = connection.prepareStatement(query);\nstatement.setString(1, customerName);\nResultSet results = statement.executeQuery();\n```",
+                    "similarity": 0.7438
+                }
+            ],
+            "abstention_assessment": "not_applicable"
+        },
+        {
+            "id": "Q15",
+            "question": "How does the principle of least privilege help prevent SQL injection damage?",
+            "expected_behavior": "answer",
+            "matched_keywords": [
+                "least privilege"
+            ],
+            "expected_keywords": [
+                "least privilege",
+                "database privileges"
+            ],
+            "keyword_coverage": 0.5,
+            "top_results": [
+                {
+                    "id": "sql_injection-0115",
+                    "title": "Least Privilege",
+                    "source": "sql_injection.md",
+                    "page": null,
+                    "text": "Least Privilege\nTo minimize the potential damage of a successful SQL injection attack, you should minimize the privileges assigned to every database account in your environment. Start from the ground up to determine what access rights your application accounts require, rather than trying to figure out what access rights you need to take away.\n\nMake sure that accounts that only need read access are only granted read access to the tables they need access to. DO NOT ASSIGN DBA OR ADMIN TYPE ACCESS TO YOUR APPLICATION ACCOUNTS. We understand that this is easy, and everything just \"works\" when you do it this way, but it is very dangerous.",
+                    "similarity": 0.7895
+                },
+                {
+                    "id": "sql_injection-0116",
+                    "title": "Minimizing Application and OS Privileges",
+                    "source": "sql_injection.md",
+                    "page": null,
+                    "text": "Minimizing Application and OS Privileges\nSQL injection is not the only threat to your database data. Attackers can simply change the parameter values from one of the legal values they are presented with, to a value that is unauthorized for them, but the application itself might be authorized to access. As such, minimizing the privileges granted to your application will reduce the likelihood of such unauthorized access attempts, even when an attacker is not trying to use SQL injection as part of their exploit.\n\nWhile you are at it, you should minimize the privileges of the operating system account that the DBMS runs under. Don't run your DBMS as root or system! Most DBMSs run out of the box with a very powerful system account. For example, MySQL runs as system on Windows by default! Change the DBMS's OS account to something more appropriate, with restricted privileges.",
+                    "similarity": 0.7658
+                },
+                {
+                    "id": "sql_injection-0119",
+                    "title": "Enhancing Least Privilege with SQL Views",
+                    "source": "sql_injection.md",
+                    "page": null,
+                    "text": "Enhancing Least Privilege with SQL Views\nYou can use SQL views to further increase the granularity of access by limiting the read access to specific fields of a table or joins of tables. It could have additional benefits.\n\nFor example, a product catalog can use a view that exposes product names and retail prices while omitting supplier costs. Grant the application's database account only `SELECT` access to that view, without access to the underlying table or other objects that expose the omitted fields. Verify your database's view privilege rules; for example, [PostgreSQL normally checks underlying table access using the view owner's privileges](https://www.postgresql.org/docs/current/sql-createview.html).\n\nThis limits the data exposed through a compromised application account. Queries against views still require parameterization to prevent SQL injection.",
+                    "similarity": 0.7616
+                },
+                {
+                    "id": "sql_injection-0117",
+                    "title": "Details Of Least Privilege When Developing",
+                    "source": "sql_injection.md",
+                    "page": null,
+                    "text": "Details Of Least Privilege When Developing\nIf an account only needs access to portions of a table, consider creating a view that limits access to that portion of the data and assigning the account access to the view instead of the underlying table. Rarely, if ever, grant create or delete access to database accounts.\n\nIf you adopt a policy where you use stored procedures everywhere, and don't allow application accounts to directly execute their own queries, then restrict those accounts to only be able to execute the stored procedures they need. Don't grant them any rights directly to the tables in the database.",
+                    "similarity": 0.7384
+                },
+                {
+                    "id": "sql_injection-0103",
+                    "title": "Introduction",
+                    "source": "sql_injection.md",
+                    "page": null,
+                    "text": "Introduction\nA SQL injection attack occurs when untrusted data (usually strings) becomes part of a query's SQL syntax, modifying the logic of the SQL request.\n\nThe malicious data can come from various sources such as:\n\n- an HTTP request (for example, from a malicious user);\n- an LDAP directory;\n- an incoming email;\n- a third party REST API service;\n- the database itself.\n\n**Impact:** A successful SQL injection attack can, depending on database features and privileges, read data from the database, modify database data (insert/update/delete), execute administration operations on the database (such as shutdown the DBMS), recover the content of a given file existing on the DBMS file system or write files into the file system, and, in some cases, execute operating system commands.\n\n**Resolution:** define the SQL structure separately from its data values, then bind those values through the database API:\n\n- use parameterized queries for dynamic data values;",
+                    "similarity": 0.7269
+                }
+            ],
+            "abstention_assessment": "not_applicable"
+        }
+    ]
+}
