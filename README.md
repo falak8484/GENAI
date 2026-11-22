@@ -377,3 +377,13 @@ docker compose up --build
 ```bash
 docker compose down
 ```
+
+## Live Deployment
+
+OWASPShield API is deployed on Render.
+
+- **API Base URL:** https://owaspshield-api-falak.onrender.com
+- **Health Check:** https://owaspshield-api-falak.onrender.com/health
+- **Swagger Documentation:** https://owaspshield-api-falak.onrender.com/docs
+
+Deployment Platform: Render (Docker)
