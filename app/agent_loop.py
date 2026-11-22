@@ -1,11 +1,12 @@
-
 # app/agent_loop.py
+
+from __future__ import annotations
 
 from app.rag import ask_question
 from app.tools import password_hash_config_checker
 
 
-def run_agent(question: str, config: dict = None) -> dict:
+def run_agent(question: str, config: dict | None = None) -> dict:
     """
     A simple hand-written agent.
 
@@ -30,7 +31,6 @@ def run_agent(question: str, config: dict = None) -> dict:
         "hashing configuration",
         "password hash config"
     ]):
-
         if config is None:
             return {
                 "tool_used": "password_hash_config_checker",

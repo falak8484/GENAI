@@ -1,12 +1,12 @@
 
 import os
 import time
-import requests
 from pathlib import Path
+
+import requests
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
-
 
 # Load environment variables
 BASE_DIR = Path(__file__).resolve().parent.parent

@@ -1,4 +1,6 @@
+
 import json
+import os
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -6,13 +8,15 @@ from pathlib import Path
 import requests
 import streamlit as st
 
-
 # CONFIGURATION
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 FEEDBACK_FILE = DATA_DIR / "feedback.json"
-API_URL = "http://127.0.0.1:8000"
+
+# Local execution uses localhost.
+# Docker Compose will set API_URL to http://api:8000.
+API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
 
 st.set_page_config(
     page_title="OWASPShield",
@@ -72,6 +76,7 @@ def api_post(endpoint, payload):
         )
         response.raise_for_status()
         return response.json()
+
     except requests.RequestException as error:
         st.error(f"API request failed: {error}")
         return None
@@ -86,6 +91,7 @@ def api_get(endpoint, params=None):
         )
         response.raise_for_status()
         return response.json()
+
     except requests.RequestException as error:
         st.error(f"API request failed: {error}")
         return None
@@ -102,6 +108,7 @@ def save_feedback(question, answer, mode, rating):
         try:
             with open(FEEDBACK_FILE, "r", encoding="utf-8") as file:
                 feedback = json.load(file)
+
         except (json.JSONDecodeError, OSError):
             feedback = []
 
@@ -114,7 +121,12 @@ def save_feedback(question, answer, mode, rating):
     })
 
     with open(FEEDBACK_FILE, "w", encoding="utf-8") as file:
-        json.dump(feedback, file, indent=4, ensure_ascii=False)
+        json.dump(
+            feedback,
+            file,
+            indent=4,
+            ensure_ascii=False
+        )
 
 
 # CITATIONS
@@ -130,6 +142,7 @@ def show_citations(citations):
                 f"**[{citation.get('id', '?')}] "
                 f"{citation.get('title', 'Untitled source')}**"
             )
+
             st.caption(
                 f"File: {citation.get('source', 'Unknown')} "
                 f"| Page: {citation.get('page') or 'N/A'}"
@@ -145,12 +158,14 @@ def find_citations(value):
 
         for item in value.values():
             found = find_citations(item)
+
             if found:
                 return found
 
     elif isinstance(value, list):
         for item in value:
             found = find_citations(item)
+
             if found:
                 return found
 
@@ -170,7 +185,10 @@ def add_message(question, answer, citations, mode):
 
 
 def ask_rag(question):
-    response = api_post("/ask", {"question": question})
+    response = api_post(
+        "/ask",
+        {"question": question}
+    )
 
     if response:
         add_message(
@@ -213,6 +231,7 @@ def ask_agent(question, config):
         )
 
         add_message(question, answer, citations, "Agent")
+
     else:
         st.warning(f"Agent response: {response}")
 
@@ -248,8 +267,11 @@ def resume_agent(approved):
                 citations,
                 "Agent"
             )
+
         else:
-            st.info(response.get("message", "Agent request finished."))
+            st.info(
+                response.get("message", "Agent request finished.")
+            )
 
     st.session_state.pending_agent = None
 
@@ -328,9 +350,11 @@ with chat_tab:
 
             try:
                 agent_config = json.loads(config_text)
+
                 if not isinstance(agent_config, dict):
                     st.error("Configuration must be a JSON object.")
                     agent_config = {}
+
             except json.JSONDecodeError:
                 st.error("Invalid JSON configuration.")
                 agent_config = {}
@@ -358,6 +382,7 @@ with chat_tab:
                         message["mode"],
                         "positive"
                     )
+
                     message["feedback"] = "positive"
                     st.rerun()
 
@@ -373,6 +398,7 @@ with chat_tab:
                         message["mode"],
                         "negative"
                     )
+
                     message["feedback"] = "negative"
                     st.rerun()
 
@@ -402,9 +428,12 @@ with chat_tab:
     if question:
         if mode == "RAG Chat":
             ask_rag(question)
+
         else:
             if st.session_state.pending_agent:
-                st.warning("Please approve or reject the pending request first.")
+                st.warning(
+                    "Please approve or reject the pending request first."
+                )
             else:
                 ask_agent(question, agent_config)
 
@@ -437,6 +466,7 @@ with mapper_tab:
     if st.button("🔎 Map Finding", type="primary"):
         if not finding.strip():
             st.warning("Please enter a security finding.")
+
         else:
             with st.spinner("Searching OWASP security records..."):
                 results = api_get(
@@ -458,6 +488,7 @@ with mapper_tab:
                 "No matching records found. Try describing "
                 "the vulnerability with different keywords."
             )
+
         else:
             for index, record in enumerate(results):
                 with st.container(border=True):
@@ -497,9 +528,15 @@ with mapper_tab:
                     checklist_items = [
                         "Review the identified vulnerability and affected component.",
                         "Implement the recommended security control: "
-                        + str(record.get("recommended_control", "Review security control.")),
+                        + str(record.get(
+                            "recommended_control",
+                            "Review security control."
+                        )),
                         "Apply the required parameter or configuration: "
-                        + str(record.get("exact_parameter", "Review required parameters.")),
+                        + str(record.get(
+                            "exact_parameter",
+                            "Review required parameters."
+                        )),
                         "Retest the application to verify the vulnerability is fixed."
                     ]
 

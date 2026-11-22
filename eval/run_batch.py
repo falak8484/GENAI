@@ -2,11 +2,10 @@
 import json
 import re
 import time
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 from app.llm import generate_response
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 EVAL_DIR = BASE_DIR / "eval"
@@ -93,7 +92,10 @@ def main():
         )
 
         if already_successful:
-            print(f"Skipping {version.upper()} Q{question_number}: already completed.")
+            print(
+                f"Skipping {version.upper()} Q{question_number}: "
+                "already completed."
+            )
             continue
 
         question = questions[question_number]
@@ -122,7 +124,7 @@ def main():
             result["answer"] = answer
             print("Status: SUCCESS")
 
-        except Exception as error:
+        except Exception as error:  # noqa: BLE001 - continue batch after individual failure
             result["status"] = "failed"
             result["error"] = f"{type(error).__name__}: {error}"
 

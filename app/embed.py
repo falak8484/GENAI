@@ -172,5 +172,5 @@ if __name__ == "__main__":
     try:
         embed_documents()
 
-    except Exception as error:
+    except Exception as error:  # noqa: BLE001 - top-level error handler
         print("Embedding failed:", type(error).__name__, error)

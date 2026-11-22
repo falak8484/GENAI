@@ -1,10 +1,10 @@
 
 # app/graph.py
 
-from typing import TypedDict, Optional
+from typing import TypedDict
 
-from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.memory import MemorySaver
+from langgraph.graph import END, START, StateGraph
 from langgraph.types import interrupt
 
 from app.rag import ask_question

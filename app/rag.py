@@ -1,7 +1,6 @@
 
-from app.vectorstore import semantic_search
 from app.llm import generate_response
-
+from app.vectorstore import semantic_search
 
 # Minimum similarity required to use retrieved information
 MIN_SIMILARITY = 0.65

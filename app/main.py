@@ -1,18 +1,19 @@
 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from typing import Optional
-from pathlib import Path
+from __future__ import annotations
+
 import json
+from pathlib import Path
+from typing import Optional
 
+from fastapi import FastAPI, HTTPException
 from langgraph.types import Command
+from pydantic import BaseModel
 
+from app.graph import agent_graph
+from app.llm import generate_response
 from app.rag import ask_question
 from app.smart_search import search_records
-from app.llm import generate_response
 from app.vectorstore import semantic_search
-from app.graph import agent_graph
-
 
 app = FastAPI(
     title="OWASPShield API",
@@ -141,7 +142,7 @@ def search_semantic(q: str):
             "results": results
         }
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - API error boundary
         print(f"SEMANTIC SEARCH ERROR: {type(e).__name__}: {e}")
 
         raise HTTPException(
@@ -169,7 +170,7 @@ def ask(data: Question):
             "citations": result["citations"]
         }
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - API error boundary
         print(f"RAG ERROR: {type(e).__name__}: {e}")
 
         raise HTTPException(
@@ -234,7 +235,7 @@ def chat(data: ChatRequest):
             "follow_up": "Would you like another example or more security recommendations?"
         }
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - API error boundary
         print(f"LLM ERROR: {type(e).__name__}: {e}")
 
         raise HTTPException(
@@ -282,7 +283,7 @@ def evaluate_prompt(data: EvaluationRequest):
             "answer": answer
         }
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - API error boundary
         print(f"EVALUATION ERROR: {type(e).__name__}: {e}")
 
         raise HTTPException(
@@ -356,7 +357,7 @@ def run_langgraph_agent(data: AgentRequest):
     except HTTPException:
         raise
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - API error boundary
         print(f"AGENT ERROR: {type(e).__name__}: {e}")
 
         raise HTTPException(

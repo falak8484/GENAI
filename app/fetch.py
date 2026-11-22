@@ -1,7 +1,7 @@
 
-import requests
 from pathlib import Path
 
+import requests
 
 RAW_DIR = Path("data/raw")
 

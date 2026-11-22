@@ -347,3 +347,33 @@ GitHub: https://github.com/falak8484/GENAI
 **Checkpoint 2 – Streamlit Interface and AI Agent Integration**
 
 Implemented capabilities include RAG-based question answering, semantic retrieval, LangGraph agent workflows, human approval, password hashing configuration checks, VAPT finding mapping, remediation checklists, and user feedback.
+
+## Run with Docker
+
+OWASPShield can be started using Docker Compose. Docker and Docker Compose must be installed.
+
+### 1. Configure environment variables
+
+Create a `.env` file in the project root and add your required environment variables:
+
+```env
+GEMINI_API_KEY=your_api_key_here
+```
+
+### 2. Build and start the services
+
+```bash
+docker compose up --build
+```
+
+### 3. Access the application
+
+- **Streamlit UI:** http://localhost:8501
+- **FastAPI API:** http://localhost:8000
+- **API documentation:** http://localhost:8000/docs
+
+### 4. Stop the services
+
+```bash
+docker compose down
+```
