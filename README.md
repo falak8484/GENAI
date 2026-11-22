@@ -1,5 +1,5 @@
 # OWASPShield
-
+![OWASPShield CI](https://github.com/falak8484/GENAI/actions/workflows/ci.yml/badge.svg?branch=main)
 ## Project Overview
 
 OWASPShield is a beginner-friendly cybersecurity awareness and security assistance project designed to help users understand common web application security risks.
