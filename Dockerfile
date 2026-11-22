@@ -10,12 +10,9 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 WORKDIR /app
 
 COPY requirements.txt .
-COPY wheelhouse/ /wheelhouse/
 
-# Install only from locally downloaded packages
-RUN pip install --no-index --find-links=/wheelhouse -r requirements.txt \
-    && rm -rf /wheelhouse
-
+# Install dependencies from PyPI
+RUN pip install --no-cache-dir -r requirements.txt
 # Copy application files
 COPY app/ ./app/
 COPY ui/ ./ui/
