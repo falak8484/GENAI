@@ -387,3 +387,60 @@ OWASPShield API is deployed on Render.
 - **Swagger Documentation:** https://owaspshield-api-falak.onrender.com/docs
 
 Deployment Platform: Render (Docker)
+
+
+## Production Notes (Day 13)
+
+### Request Monitoring
+
+OWASPShield includes request-level monitoring and LLM usage tracking.
+
+Each API request logs:
+- HTTP method, endpoint, and status code
+- Total request latency in milliseconds
+
+Each LLM call logs:
+- LLM provider
+- LLM execution latency
+- Input tokens
+- Output tokens
+- Total tokens
+
+### Response Caching
+
+A simple in-memory cache reduces repeated LLM calls.
+
+- Cache TTL: 300 seconds (5 minutes)
+- Maximum cache entries: 100
+- Cache keys are generated using the task and normalized question.
+
+### Measured Performance
+
+**Test environment:** Local FastAPI server, Gemini 2.5 Flash.
+
+| Metric | First Request | Cached Request |
+|---|---:|---:|
+| Cache status | Miss | Hit |
+| Request latency | 15,603.19 ms | 3.39 ms |
+| LLM latency | 15,583.64 ms | Not called |
+| Input tokens | 310 | 0 additional |
+| Output tokens | 1,683 | 0 additional |
+| Total tokens | 1,993 | 0 additional |
+
+The repeated request showed approximately **99.98% lower latency** in this test.
+
+These measurements represent a single local test and may vary with network conditions and provider response times.
+
+### Input Validation and Security
+
+- API input lengths are restricted using Pydantic validation.
+- User-provided content is treated as untrusted input.
+- System instructions include prompt-injection resistance rules.
+- Automated tests verify input limits, prompt boundaries, and cache behavior.
+
+### Testing
+
+- Total automated tests: 29
+- Passed: 29
+- Failed: 0
+- Code quality: Ruff checks passed.

@@ -1,4 +1,5 @@
 
+import logging
 import os
 import time
 from pathlib import Path
@@ -8,18 +9,21 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
-# Load environment variables
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
+logger = logging.getLogger("owaspshield")
 
-def generate_response(user_prompt, system_prompt):
 
+def generate_response_with_metrics(user_prompt, system_prompt):
     provider = os.getenv("LLM_PROVIDER", "gemini").lower()
+    start_time = time.perf_counter()
 
-    # Gemini provider
+    input_tokens = 0
+    output_tokens = 0
+    answer = ""
+
     if provider == "gemini":
-
         api_key = os.getenv("GEMINI_API_KEY")
 
         if not api_key or api_key == "your_gemini_api_key_here":
@@ -28,15 +32,9 @@ def generate_response(user_prompt, system_prompt):
             )
 
         client = genai.Client(api_key=api_key)
+        model = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
-        model = os.getenv(
-            "GEMINI_MODEL",
-            "gemini-2.5-flash"
-        )
-
-        # Try up to 3 times for temporary server errors
         for attempt in range(3):
-
             try:
                 response = client.models.generate_content(
                     model=model,
@@ -46,10 +44,17 @@ def generate_response(user_prompt, system_prompt):
                     )
                 )
 
-                return response.text
+                answer = response.text or ""
+
+                usage = response.usage_metadata
+
+                if usage:
+                    input_tokens = usage.prompt_token_count or 0
+                    output_tokens = usage.candidates_token_count or 0
+
+                break
 
             except Exception as error:
-
                 error_message = str(error).lower()
 
                 temporary_error = any(
@@ -63,27 +68,19 @@ def generate_response(user_prompt, system_prompt):
                     ]
                 )
 
-                # Do not retry permanent errors
-                if not temporary_error:
-                    raise
-
-                # Stop after the third attempt
-                if attempt == 2:
+                if not temporary_error or attempt == 2:
                     raise
 
                 wait_time = 2 ** (attempt + 1)
 
-                print(
-                    f"Gemini temporarily unavailable. "
-                    f"Retrying in {wait_time} seconds... "
-                    f"(Attempt {attempt + 2}/3)"
+                logger.warning(
+                    "Gemini temporarily unavailable. Retrying in %s seconds.",
+                    wait_time
                 )
 
                 time.sleep(wait_time)
 
-    # Groq provider
     elif provider == "groq":
-
         api_key = os.getenv("GROQ_API_KEY")
 
         if not api_key or api_key == "your_groq_api_key_here":
@@ -118,10 +115,45 @@ def generate_response(user_prompt, system_prompt):
         )
 
         response.raise_for_status()
+        result = response.json()
 
-        return response.json()["choices"][0]["message"]["content"]
+        answer = result["choices"][0]["message"]["content"]
+
+        usage = result.get("usage") or {}
+
+        input_tokens = usage.get("prompt_tokens", 0)
+        output_tokens = usage.get("completion_tokens", 0)
 
     else:
         raise ValueError(
             "Unsupported LLM provider. Choose 'gemini' or 'groq'."
         )
+
+    latency_ms = (time.perf_counter() - start_time) * 1000
+
+    logger.info(
+        "llm_metrics provider=%s latency_ms=%.2f input_tokens=%s output_tokens=%s total_tokens=%s",
+        provider,
+        latency_ms,
+        input_tokens,
+        output_tokens,
+        input_tokens + output_tokens
+    )
+
+    return {
+        "answer": answer,
+        "provider": provider,
+        "latency_ms": round(latency_ms, 2),
+        "input_tokens": input_tokens,
+        "output_tokens": output_tokens,
+        "total_tokens": input_tokens + output_tokens
+    }
+
+
+def generate_response(user_prompt, system_prompt):
+    result = generate_response_with_metrics(
+        user_prompt=user_prompt,
+        system_prompt=system_prompt
+    )
+
+    return result["answer"]

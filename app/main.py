@@ -2,24 +2,39 @@
 from __future__ import annotations
 
 import json
+import logging
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
+from fastapi import Path as ApiPath
 from langgraph.types import Command
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
+from app.cache import (
+    get_cached_response,
+    make_cache_key,
+    set_cached_response,
+)
 from app.graph import agent_graph
 from app.llm import generate_response
+from app.monitoring import request_monitoring_middleware
 from app.rag import ask_question
 from app.smart_search import search_records
 from app.vectorstore import semantic_search
+
+logging.basicConfig(level=logging.INFO)
+
+logger = logging.getLogger("owaspshield")
 
 app = FastAPI(
     title="OWASPShield API",
     description="API for OWASP security cheat sheet records",
     version="1.5"
 )
+
+# Enable request latency monitoring
+app.middleware("http")(request_monitoring_middleware)
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,28 +63,28 @@ def load_prompt(filename):
         )
 
 
-# Existing question request model
+# Question request model
 class Question(BaseModel):
-    question: str
+    question: str = Field(max_length=4000)
 
 
 # Chat request model
 class ChatRequest(BaseModel):
-    question: str
-    task: str = "explain"
+    question: str = Field(max_length=4000)
+    task: str = Field(default="explain", max_length=20)
 
 
 # Prompt evaluation request model
 class EvaluationRequest(BaseModel):
-    question: str
-    prompt_version: str
+    question: str = Field(max_length=4000)
+    prompt_version: str = Field(max_length=2)
 
 
 # LangGraph agent request model
 class AgentRequest(BaseModel):
-    question: Optional[str] = None
+    question: Optional[str] = Field(default=None, max_length=4000)
     config: Optional[dict] = None
-    thread_id: str
+    thread_id: str = Field(min_length=1, max_length=200)
     approved: Optional[bool] = None
     resume: bool = False
 
@@ -85,21 +100,18 @@ def health():
 
 # Get records
 @app.get("/records")
-def get_records(limit: int = 10):
+def get_records(
+    limit: int = Query(default=10, ge=1, le=100)
+):
     records = load_records()
-
-    if limit < 1:
-        raise HTTPException(
-            status_code=400,
-            detail="Limit must be at least 1"
-        )
-
     return records[:limit]
 
 
 # Get record by ID
 @app.get("/records/{id}")
-def get_record(id: int):
+def get_record(
+    id: int = ApiPath(ge=1)
+):
     records = load_records()
 
     for index, record in enumerate(records, start=1):
@@ -114,7 +126,9 @@ def get_record(id: int):
 
 # Existing keyword-based search
 @app.get("/search")
-def search(q: str):
+def search(
+    q: str = Query(..., max_length=200)
+):
     if not q.strip():
         raise HTTPException(
             status_code=400,
@@ -126,7 +140,9 @@ def search(q: str):
 
 # Semantic search using ChromaDB
 @app.get("/search/semantic")
-def search_semantic(q: str):
+def search_semantic(
+    q: str = Query(..., max_length=200)
+):
     if not q.strip():
         raise HTTPException(
             status_code=400,
@@ -142,8 +158,8 @@ def search_semantic(q: str):
             "results": results
         }
 
-    except Exception as e:  # noqa: BLE001 - API error boundary
-        print(f"SEMANTIC SEARCH ERROR: {type(e).__name__}: {e}")
+    except Exception as e:
+        logger.exception("Semantic search failed: %s", type(e).__name__)
 
         raise HTTPException(
             status_code=502,
@@ -170,8 +186,8 @@ def ask(data: Question):
             "citations": result["citations"]
         }
 
-    except Exception as e:  # noqa: BLE001 - API error boundary
-        print(f"RAG ERROR: {type(e).__name__}: {e}")
+    except Exception as e:
+        logger.exception("RAG failed: %s", type(e).__name__)
 
         raise HTTPException(
             status_code=502,
@@ -195,7 +211,7 @@ def ask_question_endpoint(data: Question):
     }
 
 
-# AI-powered chat endpoint
+# AI-powered chat endpoint with caching
 @app.post("/chat")
 def chat(data: ChatRequest):
 
@@ -223,20 +239,59 @@ def chat(data: ChatRequest):
         question=data.question
     )
 
+    # Create a cache key using the question and task
+    cache_key = make_cache_key(
+        question=user_prompt,
+        task=data.task
+    )
+
+    # Check whether a previous response is available
+    cached_answer = get_cached_response(cache_key)
+
+    if cached_answer is not None:
+        logger.info(
+            "llm_cache status=hit task=%s",
+            data.task
+        )
+
+        return {
+            "answer": cached_answer,
+            "confidence": "Not calibrated",
+            "follow_up": (
+                "Would you like another example or "
+                "more security recommendations?"
+            )
+        }
+
+    logger.info(
+        "llm_cache status=miss task=%s",
+        data.task
+    )
+
     try:
         answer = generate_response(
             user_prompt=user_prompt,
             system_prompt=system_prompt
         )
 
+        # Store successful responses for future requests
+        if answer:
+            set_cached_response(
+                cache_key,
+                answer
+            )
+
         return {
             "answer": answer,
             "confidence": "Not calibrated",
-            "follow_up": "Would you like another example or more security recommendations?"
+            "follow_up": (
+                "Would you like another example or "
+                "more security recommendations?"
+            )
         }
 
-    except Exception as e:  # noqa: BLE001 - API error boundary
-        print(f"LLM ERROR: {type(e).__name__}: {e}")
+    except Exception as e:
+        logger.exception("LLM failed: %s", type(e).__name__)
 
         raise HTTPException(
             status_code=502,
@@ -283,8 +338,8 @@ def evaluate_prompt(data: EvaluationRequest):
             "answer": answer
         }
 
-    except Exception as e:  # noqa: BLE001 - API error boundary
-        print(f"EVALUATION ERROR: {type(e).__name__}: {e}")
+    except Exception as e:
+        logger.exception("Evaluation failed: %s", type(e).__name__)
 
         raise HTTPException(
             status_code=502,
@@ -357,8 +412,8 @@ def run_langgraph_agent(data: AgentRequest):
     except HTTPException:
         raise
 
-    except Exception as e:  # noqa: BLE001 - API error boundary
-        print(f"AGENT ERROR: {type(e).__name__}: {e}")
+    except Exception as e:
+        logger.exception("Agent failed: %s", type(e).__name__)
 
         raise HTTPException(
             status_code=500,
