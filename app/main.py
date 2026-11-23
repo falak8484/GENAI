@@ -21,7 +21,12 @@ from app.llm import generate_response
 from app.monitoring import request_monitoring_middleware
 from app.rag import ask_question
 from app.smart_search import search_records
-from app.vectorstore import semantic_search
+from app.vectorstore import (
+    semantic_search,
+    build_vectorstore,
+    collection,
+    EMBEDDED_FILE,
+)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -35,6 +40,23 @@ app = FastAPI(
 
 # Enable request latency monitoring
 app.middleware("http")(request_monitoring_middleware)
+
+
+# Initialize vector database when the API starts
+@app.on_event("startup")
+def initialize_vectorstore():
+    try:
+        if EMBEDDED_FILE.exists() and collection.count() == 0:
+            logger.info("Building OWASPShield vector database...")
+            build_vectorstore()
+        else:
+            logger.info(
+                "Vector database already initialized. Chunks: %s",
+                collection.count()
+            )
+    except Exception:
+        logger.exception("Vector database initialization failed.")
+        raise
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -239,13 +261,11 @@ def chat(data: ChatRequest):
         question=data.question
     )
 
-    # Create a cache key using the question and task
     cache_key = make_cache_key(
         question=user_prompt,
         task=data.task
     )
 
-    # Check whether a previous response is available
     cached_answer = get_cached_response(cache_key)
 
     if cached_answer is not None:
@@ -274,7 +294,6 @@ def chat(data: ChatRequest):
             system_prompt=system_prompt
         )
 
-        # Store successful responses for future requests
         if answer:
             set_cached_response(
                 cache_key,
@@ -359,7 +378,6 @@ def run_langgraph_agent(data: AgentRequest):
 
     try:
 
-        # Resume after human approval or rejection
         if data.resume:
 
             if data.approved is None:
@@ -373,7 +391,6 @@ def run_langgraph_agent(data: AgentRequest):
                 config=graph_config
             )
 
-        # Start a new agent request
         else:
 
             if not data.question or not data.question.strip():
@@ -390,7 +407,6 @@ def run_langgraph_agent(data: AgentRequest):
                 config=graph_config
             )
 
-        # Check whether human approval is required
         interrupts = result.get("__interrupt__", [])
 
         if interrupts:
@@ -400,7 +416,6 @@ def run_langgraph_agent(data: AgentRequest):
                 "approval": interrupts[0].value
             }
 
-        # Completed response
         return {
             "status": "completed",
             "thread_id": data.thread_id,
