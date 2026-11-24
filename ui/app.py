@@ -8,6 +8,7 @@ from pathlib import Path
 import requests
 import streamlit as st
 
+
 # CONFIGURATION
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -185,8 +186,9 @@ def add_message(question, answer, citations, mode):
 
 
 def ask_rag(question):
+    # Hybrid endpoint: RAG first, Gemini fallback.
     response = api_post(
-        "/ask",
+        "/ask-hybrid",
         {"question": question}
     )
 
@@ -195,7 +197,7 @@ def ask_rag(question):
             question,
             response.get("answer", "No answer returned."),
             response.get("citations", []),
-            "RAG"
+            response.get("mode", "AI")
         )
 
 

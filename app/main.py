@@ -181,7 +181,10 @@ def search_semantic(
         }
 
     except Exception as e:
-        logger.exception("Semantic search failed: %s", type(e).__name__)
+        logger.exception(
+            "Semantic search failed: %s",
+            type(e).__name__
+        )
 
         raise HTTPException(
             status_code=502,
@@ -189,7 +192,7 @@ def search_semantic(
         )
 
 
-# RAG endpoint using OWASP documents
+# Strict RAG endpoint using OWASP documents
 @app.post("/ask")
 def ask(data: Question):
 
@@ -209,11 +212,76 @@ def ask(data: Question):
         }
 
     except Exception as e:
-        logger.exception("RAG failed: %s", type(e).__name__)
+        logger.exception(
+            "RAG failed: %s",
+            type(e).__name__
+        )
 
         raise HTTPException(
             status_code=502,
             detail="Unable to generate a RAG response."
+        )
+
+
+# Hybrid endpoint: RAG first, Gemini fallback
+@app.post("/ask-hybrid")
+def ask_hybrid(data: Question):
+
+    if not data.question.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Question cannot be empty"
+        )
+
+    try:
+        # Step 1: Search the OWASP knowledge base
+        result = ask_question(data.question)
+
+        # Step 2: Return grounded RAG answer when available
+        if result["answer"].strip().lower() != "i don't know":
+            return {
+                "question": data.question,
+                "answer": result["answer"],
+                "citations": result["citations"],
+                "mode": "RAG"
+            }
+
+        # Step 3: Use Gemini when RAG cannot answer
+        logger.info("RAG had no answer. Using Gemini fallback.")
+
+        answer = generate_response(
+            user_prompt=data.question,
+            system_prompt=(
+                "You are OWASPShield, a cybersecurity assistant. "
+                "Answer cybersecurity questions using your general "
+                "knowledge. Explain concepts in simple language and "
+                "provide practical security recommendations. "
+                "Be honest when you are uncertain. "
+                "Never invent citations or sources. "
+                "If a question is unrelated to cybersecurity, "
+                "politely explain that you specialize in cybersecurity."
+            )
+        )
+
+        if not answer or not answer.strip():
+            raise ValueError("Gemini returned an empty response.")
+
+        return {
+            "question": data.question,
+            "answer": answer.strip(),
+            "citations": [],
+            "mode": "AI"
+        }
+
+    except Exception as e:
+        logger.exception(
+            "Hybrid response failed: %s",
+            type(e).__name__
+        )
+
+        raise HTTPException(
+            status_code=502,
+            detail="Unable to generate a response."
         )
 
 
@@ -310,7 +378,10 @@ def chat(data: ChatRequest):
         }
 
     except Exception as e:
-        logger.exception("LLM failed: %s", type(e).__name__)
+        logger.exception(
+            "LLM failed: %s",
+            type(e).__name__
+        )
 
         raise HTTPException(
             status_code=502,
@@ -358,7 +429,10 @@ def evaluate_prompt(data: EvaluationRequest):
         }
 
     except Exception as e:
-        logger.exception("Evaluation failed: %s", type(e).__name__)
+        logger.exception(
+            "Evaluation failed: %s",
+            type(e).__name__
+        )
 
         raise HTTPException(
             status_code=502,
@@ -428,7 +502,10 @@ def run_langgraph_agent(data: AgentRequest):
         raise
 
     except Exception as e:
-        logger.exception("Agent failed: %s", type(e).__name__)
+        logger.exception(
+            "Agent failed: %s",
+            type(e).__name__
+        )
 
         raise HTTPException(
             status_code=500,
