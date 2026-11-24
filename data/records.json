@@ -118,5 +118,45 @@
         "exact_parameter": "Input type, length and format validation",
         "owasp_top10_category": "A05:2025 Injection",
         "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "Cross Site Scripting Prevention Cheat Sheet",
+        "vulnerability": "Untrusted input inserted into HTML content can execute malicious scripts.",
+        "recommended_control": "HTML-encode untrusted data before inserting it into HTML body content.",
+        "exact_parameter": "HTML entity encoding for untrusted output",
+        "owasp_top10_category": "A05:2025 Injection",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "Cross Site Scripting Prevention Cheat Sheet",
+        "vulnerability": "Untrusted input placed inside HTML attributes can break out of the attribute and execute scripts.",
+        "recommended_control": "Encode untrusted values before inserting them into HTML attributes and quote attribute values.",
+        "exact_parameter": "HTML attribute encoding and quoted attribute values",
+        "owasp_top10_category": "A05:2025 Injection",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "Cross Site Scripting Prevention Cheat Sheet",
+        "vulnerability": "Untrusted data inserted into JavaScript contexts can lead to script execution.",
+        "recommended_control": "Avoid placing untrusted data directly in JavaScript. Use safe serialization and context-appropriate encoding.",
+        "exact_parameter": "Safe JavaScript serialization and JavaScript-context encoding",
+        "owasp_top10_category": "A05:2025 Injection",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "Cross Site Scripting Prevention Cheat Sheet",
+        "vulnerability": "Untrusted data inserted into CSS contexts can manipulate styles or create security risks.",
+        "recommended_control": "Avoid inserting untrusted data into CSS. Validate and encode values for the specific CSS context.",
+        "exact_parameter": "CSS context validation and encoding",
+        "owasp_top10_category": "A05:2025 Injection",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.md"
+    },
+    {
+        "cheat_sheet": "Cross Site Scripting Prevention Cheat Sheet",
+        "vulnerability": "Untrusted data in URLs can alter URL behavior or introduce script execution risks.",
+        "recommended_control": "URL-encode untrusted parameter values and validate URLs before rendering them.",
+        "exact_parameter": "URL component encoding and URL scheme validation",
+        "owasp_top10_category": "A05:2025 Injection",
+        "source_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.md"
     }
 ]

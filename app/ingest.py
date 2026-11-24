@@ -8,9 +8,17 @@ RAW_DIR = Path("data/raw")
 OUTPUT_FILE = Path("data/records.json")
 
 SOURCE_URLS = {
-    "authentication.md": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Authentication_Cheat_Sheet.md",
-    "password_storage.md": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Password_Storage_Cheat_Sheet.md",
-    "sql_injection.md": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.md"
+    "authentication.md":
+        "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Authentication_Cheat_Sheet.md",
+
+    "password_storage.md":
+        "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Password_Storage_Cheat_Sheet.md",
+
+    "sql_injection.md":
+        "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.md",
+
+    "xss_prevention.md":
+        "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/master/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.md"
 }
 
 RULES = {
@@ -109,6 +117,39 @@ RULES = {
             "Invalid or unexpected input can create application security risks, including SQL injection when used unsafely.",
             "Validate input according to expected type, length and format, while continuing to use parameter binding.",
             "Input type, length and format validation",
+            "A05:2025 Injection"
+        )
+    },
+
+    "xss_prevention.md": {
+        "Output Encoding for “HTML Contexts”": (
+            "Untrusted input inserted into HTML content can execute malicious scripts.",
+            "HTML-encode untrusted data before inserting it into HTML body content.",
+            "HTML entity encoding for untrusted output",
+            "A05:2025 Injection"
+        ),
+        "Output Encoding for “HTML Attribute Contexts”": (
+            "Untrusted input placed inside HTML attributes can break out of the attribute and execute scripts.",
+            "Encode untrusted values before inserting them into HTML attributes and quote attribute values.",
+            "HTML attribute encoding and quoted attribute values",
+            "A05:2025 Injection"
+        ),
+        "Output Encoding for “JavaScript Contexts”": (
+            "Untrusted data inserted into JavaScript contexts can lead to script execution.",
+            "Avoid placing untrusted data directly in JavaScript. Use safe serialization and context-appropriate encoding.",
+            "Safe JavaScript serialization and JavaScript-context encoding",
+            "A05:2025 Injection"
+        ),
+        "Output Encoding for “CSS Contexts”": (
+            "Untrusted data inserted into CSS contexts can manipulate styles or create security risks.",
+            "Avoid inserting untrusted data into CSS. Validate and encode values for the specific CSS context.",
+            "CSS context validation and encoding",
+            "A05:2025 Injection"
+        ),
+        "Output Encoding for “URL Contexts”": (
+            "Untrusted data in URLs can alter URL behavior or introduce script execution risks.",
+            "URL-encode untrusted parameter values and validate URLs before rendering them.",
+            "URL component encoding and URL scheme validation",
             "A05:2025 Injection"
         )
     }
