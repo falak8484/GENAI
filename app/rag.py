@@ -91,12 +91,21 @@ Remember:
 """
 
     # Step 5: Generate the grounded answer
-    answer = generate_response(
-        user_prompt=user_prompt,
-        system_prompt=SYSTEM_PROMPT
-    )
+    try:
+        answer = generate_response(
+            user_prompt=user_prompt,
+            system_prompt=SYSTEM_PROMPT
+        )
 
-    answer = answer.strip()
+        answer = answer.strip()
+
+    except Exception:
+        # Gemini unavailable: return retrieved source excerpts
+        answer = (
+            "Gemini is temporarily unavailable. "
+            "Showing retrieved OWASP source excerpts instead:\n\n"
+            + context
+        )
 
     # Step 6: Remove citations if the model does not know
     if answer.lower().rstrip(".") == "i don't know":
